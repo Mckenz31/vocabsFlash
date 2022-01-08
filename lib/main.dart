@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'pages/flashcards.dart';
 import 'pages/landingPage.dart';
-import 'pages/flashcards.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,10 +24,12 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       routes: {
-        '/landingPage': (context) => landingPage(),
+        '/': (context) => landingPage(),
         '/flashCards': (context) => FlashCards(),
       },
-      home: landingPage(),
+      initialRoute: kDebugMode
+          ? String.fromEnvironment('START_PATH', defaultValue: '/')
+          : '/',
     );
   }
 }
