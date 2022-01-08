@@ -24,10 +24,10 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       routes: {
-        '/landingPage': (context) => landingPage(),
+        '/landingPage': (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
       },
-      home: landingPage(),
+      home: LandingPage(),
     );
   }
 }

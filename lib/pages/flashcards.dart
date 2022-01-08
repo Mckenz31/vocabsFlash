@@ -12,7 +12,14 @@ class _FlashCardsState extends State<FlashCards> {
   String meaning = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[0]['definition'];
   String example = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[0]['example'];
   // String synonym = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[1]['synonym'];
-  String s1, s2, s3, s4, s5, s6, s7, synonym;
+  String s1="", s2="", s3="", s4="", s5="", s6="", s7="", synonym="";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSynonym();
+  }
 
   String getSynonym(){
     // print('${((Constants().value[0]['meanings'] as List<dynamic>)[0]['definitions'] as List<dynamic>)[0]['synonyms'].length - 1}');
@@ -26,9 +33,7 @@ class _FlashCardsState extends State<FlashCards> {
       s6 = (((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[0]['synonyms'][6]);
     }
     synonym = s1 + ',' + s2 + ',' + s3 + ',' + s4 + ',' + s5 + ',' + s6;
-    return synonym;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +46,22 @@ class _FlashCardsState extends State<FlashCards> {
           Flexible(
             flex: 15,
             child: Container(
+
               // height: MediaQuery.of(context).size.height/1.5,
               // width: MediaQuery.of(context).size.width,
-              color: Colors.red,
+              // color: Colors.red,
               child: Center(
                 child: FlipCard(
                   fill: Fill.fillBack, // Fill the back side of the card to make in the same size as the front.
                   direction: FlipDirection.HORIZONTAL, // default
                   front: Container(
-                    child: Center(child: Text(val, style: TextStyle(fontSize: 100),)),
+                    margin: EdgeInsets.all(10),
+                    color: Color(0xffF5591F),
+                    child: Center(child: Text(val, style: TextStyle(fontSize: 100,),)),
                   ),
                   back: Container(
-
+                    margin: EdgeInsets.all(10),
+                    color: Color(0xffF5591F),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,7 +70,8 @@ class _FlashCardsState extends State<FlashCards> {
                         SizedBox(height: 20,),
                         Text('  Example: ' +example, style: TextStyle(fontSize: 22),),
                         SizedBox(height: 20,),
-                        Text('Synonym: ' +s1 +", " +s2 +", " +s3 +", " +s4 +", " +s5 +", " +s6, style: TextStyle(fontSize: 20),),
+                        // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
+                        synonym != null ? Text('Synonym: ' +s1 +" ," +s2 +" ," +s3 +" ," +s4 +" ," +s5 +" ," +s6, style: TextStyle(fontSize: 20),) : Text("")
                       ],
                     ),
                   ),
