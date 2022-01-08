@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/flashCards': (context) => FlashCards(),
       },
       initialRoute: kDebugMode
-          ? String.fromEnvironment('START_PATH', defaultValue: '/')
+          ? const String.fromEnvironment('START_PATH', defaultValue: '/')
           : '/',
     );
   }
