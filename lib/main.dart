@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/flashcards.dart';
+import 'pages/landingPage.dart';
+import 'pages/flashcards.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,11 +23,11 @@ class MyApp extends StatelessWidget {
         /* dark theme settings */
       ),
       themeMode: ThemeMode.dark,
-      /* ThemeMode.system to follow system theme,
-         ThemeMode.light for light theme,
-         ThemeMode.dark for dark theme
-      */
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        '/landingPage': (context) => landingPage(),
+        '/flashCards': (context) => FlashCards(),
+      },
+      home: landingPage(),
     );
   }
 }
