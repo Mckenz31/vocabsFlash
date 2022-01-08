@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+### custom paths to ignore
+# a directory for storing *other* proj-related files
+# e.g the images and designs that are under discussion
+/.meta
