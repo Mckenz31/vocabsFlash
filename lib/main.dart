@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'pages/flashcards.dart';
-import 'pages/landingPage.dart';
+import 'pages/landingpage.dart';
 
 void main() {
   runApp(MyApp());
