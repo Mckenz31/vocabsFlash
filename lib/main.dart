@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       routes: {
-        '/': (context) => landingPage(),
+        '/': (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
       },
       initialRoute: kDebugMode
