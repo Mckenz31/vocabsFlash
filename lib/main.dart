@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'pages/flashcards.dart';
-import 'pages/landingPage.dart';
+import 'pages/landingpage.dart';
 import 'pages/flashcards.dart';
 
 void main() {
