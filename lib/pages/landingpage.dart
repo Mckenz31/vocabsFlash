@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'flashcards.dart';
+import 'practicecards.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -59,10 +60,11 @@ class LandingPage extends StatelessWidget {
           ),
           FlatButton(
             splashColor: Color(0xffF5341F),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            onPressed: () {
-              Navigator.pushNamed(context, '/flashCards');
+
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            onPressed: (){
+              Navigator.pushNamed(context,'/practiceCards');
+
             },
             padding: EdgeInsets.symmetric(
               horizontal: 100.0,
@@ -82,12 +84,11 @@ class LandingPage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 30),
             child: FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              onPressed: () {
-                // Navigator.pushNamed(context,'/flashCards');
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FlashCards()));
+
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              onPressed: (){
+                Navigator.pushNamed(context,'/flashCards');
+
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 100.0,
