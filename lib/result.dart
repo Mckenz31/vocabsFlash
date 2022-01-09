@@ -20,15 +20,14 @@ class Result extends StatelessWidget {
         Row(children: [
           Text('Antonyms : ',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-          Expanded(
-              child: Row(children: [
+          Row(children: [
             ...(result.antonyms)
                 .map((e) => Padding(
                       padding: EdgeInsets.all(4),
                       child: Text(e, style: TextStyle(fontSize: 16)),
                     ))
                 .toList()
-          ]))
+          ])
         ]),
         SizedBox(height: 40),
         Row(children: [

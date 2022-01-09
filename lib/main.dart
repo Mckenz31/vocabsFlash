@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'pages/flashcards.dart';
+import 'pages/landingpage.dart';
 import 'package:vocabs_flash/search.dart';
 
 void main() {
@@ -14,7 +17,25 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Search(),
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        /* light theme settings */
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        /* dark theme settings */
+      ),
+      themeMode: ThemeMode.dark,
+      routes: {
+        '/': (context) => LandingPage(),
+        '/flashCards': (context) => FlashCards(),
+        '/search': (context) => Search(),
+      },
+      initialRoute: kDebugMode
+          ? const String.fromEnvironment('START_PATH', defaultValue: '/')
+          : '/',
     );
   }
 }
