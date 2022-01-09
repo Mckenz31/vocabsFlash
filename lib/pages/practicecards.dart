@@ -45,7 +45,7 @@ class _PracticeCardsState extends State<PracticeCards> {
     return Scaffold(
       appBar: AppBar(title: Title(color: Colors.deepOrangeAccent, child: Text('Practice')),),
       body: Container(
-        color: Colors.deepOrange,
+        color: Colors.orange,
         child: Column(
           children: [
             Row(
@@ -67,17 +67,40 @@ class _PracticeCardsState extends State<PracticeCards> {
               ],
             ),
             Container(
-              height: MediaQuery.of(context).size.height/2,
-              width: MediaQuery.of(context).size.height,
+              height: MediaQuery.of(context).size.height/1.5,
+              width: MediaQuery.of(context).size.width,
               // color: Colors.deepOrange,
               child: Card(
-                color: Colors.deepOrange,
+                color: Colors.orange,
                 child: Center(child: Text("hello", style: TextStyle(fontSize: 59, fontWeight: FontWeight.w900),)),
               ),
             ),
-            Flexible(
+            Expanded(
               child: Container(
                 color: Colors.black,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      child: Icon(Icons.clear),
+                      onPressed: (){
+
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                    ),
+                    ElevatedButton(
+                      child: Icon(Icons.check),
+                      onPressed: (){
+                      
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
