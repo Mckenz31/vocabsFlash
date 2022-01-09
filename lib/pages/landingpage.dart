@@ -26,20 +26,11 @@ class LandingPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/fourth');
-                      },
-                      icon: Icon(Icons.settings),
-                      color: Colors.white,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/fifth');
-                      },
-                      icon: Icon(Icons.info_outline),
-                      color: Colors.white,
-                    ),
+
+                    IconButton(onPressed: (){
+                      Navigator.pushNamed(context,'/search');
+                    }, icon: Icon(Icons.info_outline),
+                      color: Colors.white,),
                   ],
                 ),
                 Container(
@@ -59,21 +50,20 @@ class LandingPage extends StatelessWidget {
             height: 100,
           ),
           FlatButton(
+            padding: EdgeInsets.symmetric(
+              horizontal: 50.0,
+              vertical: 10.0,
+            ),
             splashColor: Color(0xffF5341F),
 
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             onPressed: (){
-              Navigator.pushNamed(context,'/practiceCards');
-
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
             },
-            padding: EdgeInsets.symmetric(
-              horizontal: 100.0,
-              vertical: 10.0,
-            ),
             color: Color(0xffF5591F),
             textColor: Colors.white,
             child: Text(
-              "PRACTICE",
+              "FLASHCARDS",
               style: TextStyle(
                 fontSize: 30.0,
                 fontFamily: "Times New Roman",
@@ -97,7 +87,7 @@ class LandingPage extends StatelessWidget {
               color: Color(0xffF5591F),
               textColor: Colors.white,
               child: Text(
-                "LEARN",
+                "SETTINGS",
                 style: TextStyle(
                   fontSize: 30.0,
                   fontFamily: "Times New Roman",

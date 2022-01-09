@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'pages/flashcards.dart';
+import 'pages/intoductionpage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vocabs_flash/pages/practicecards.dart';
-import 'pages/flashcards.dart';
 import 'pages/landingpage.dart';
 import 'package:vocabs_flash/search.dart';
 
@@ -28,13 +30,13 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
         /* dark theme settings */
       ),
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode,
       routes: {
-        '/': (context) => LandingPage(),
+        '/': (context) => IntroductionPage(),
+        '/landingPage' : (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
         '/search': (context) => Search(),
         '/practiceCards': (context) => PracticeCards()
-
       },
       initialRoute: kDebugMode
           ? const String.fromEnvironment('START_PATH', defaultValue: '/')
