@@ -3,13 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:vocabs_flash/pages/practicecards.dart';
 import 'pages/flashcards.dart';
 import 'pages/landingpage.dart';
+import 'package:vocabs_flash/search.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +32,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
+        '/search': (context) => Search(),
         '/practiceCards': (context) => PracticeCards()
+
       },
       initialRoute: kDebugMode
           ? const String.fromEnvironment('START_PATH', defaultValue: '/')

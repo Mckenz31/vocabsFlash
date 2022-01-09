@@ -10,15 +10,14 @@ class LandingPage extends StatelessWidget {
         children: <Widget>[
           Container(
             height: 250,
-            width: double.infinity ,
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
               color: Color(0xffF5591F),
               gradient: LinearGradient(
                   colors: [(new Color(0xffF5591F)), (new Color(0xffF2861E))],
                   begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter
-              ),
+                  end: Alignment.bottomCenter),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,15 +26,20 @@ class LandingPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/fourth');
-                    }, icon: Icon(Icons.settings),
-                      color: Colors.white,),
-
-                    IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/fifth');
-                    }, icon: Icon(Icons.info_outline),
-                      color: Colors.white,),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/fourth');
+                      },
+                      icon: Icon(Icons.settings),
+                      color: Colors.white,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/fifth');
+                      },
+                      icon: Icon(Icons.info_outline),
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 Container(
@@ -44,12 +48,10 @@ class LandingPage extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 50.0,
                         fontFamily: "Times New Roman",
-                        color: Colors.white
-                    ),
+                        color: Colors.white),
                   ),
                 ),
-                SizedBox(
-                )
+                SizedBox()
               ],
             ),
           ),
@@ -58,9 +60,11 @@ class LandingPage extends StatelessWidget {
           ),
           FlatButton(
             splashColor: Color(0xffF5341F),
+
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             onPressed: (){
               Navigator.pushNamed(context,'/practiceCards');
+
             },
             padding: EdgeInsets.symmetric(
               horizontal: 100.0,
@@ -77,13 +81,14 @@ class LandingPage extends StatelessWidget {
               ),
             ),
           ),
-
           Padding(
-            padding: EdgeInsets.only(left: 20, right:20,top:30),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 30),
             child: FlatButton(
+
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               onPressed: (){
                 Navigator.pushNamed(context,'/flashCards');
+
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 100.0,
@@ -102,27 +107,28 @@ class LandingPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right:20,top:100),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 100),
             child: FlatButton.icon(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-              onPressed: (){
-                Navigator.pushNamed(context,'/third');
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              onPressed: () {
+                Navigator.pushNamed(context, '/search');
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 80.0,
                 vertical: 20.0,
               ),
-
               color: Color(0xffF5591F),
               textColor: Colors.white,
-
               icon: Icon(Icons.search, color: Colors.white),
-              label: Text("BROWSE SEARCH",
+              label: Text(
+                "BROWSE SEARCH",
                 style: TextStyle(
                   fontSize: 20.0,
                   fontFamily: "Times New Roman",
                   fontWeight: FontWeight.w400,
-                ),),
+                ),
+              ),
             ),
           ),
         ],
