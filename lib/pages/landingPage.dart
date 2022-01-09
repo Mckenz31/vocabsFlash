@@ -32,10 +32,6 @@ class _LandingPageState extends State<LandingPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/fourth');
-                    }, icon: Icon(Icons.settings),
-                      color: Colors.white,),
 
                     IconButton(onPressed: (){
                       Navigator.pushNamed(context,'/fifth');
@@ -65,7 +61,8 @@ class _LandingPageState extends State<LandingPage> {
             splashColor: Color(0xffF5341F),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             onPressed: (){
-              Navigator.pushNamed(context,'/first');
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
             },
             padding: EdgeInsets.symmetric(
               horizontal: 100.0,
@@ -74,7 +71,7 @@ class _LandingPageState extends State<LandingPage> {
             color: Color(0xffF5591F),
             textColor: Colors.white,
             child: Text(
-              "PRACTICE",
+              "FLASHCARDS",
               style: TextStyle(
                 fontSize: 30.0,
                 fontFamily: "Times New Roman",
@@ -89,7 +86,7 @@ class _LandingPageState extends State<LandingPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               onPressed: (){
                 // Navigator.pushNamed(context,'/flashCards');
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
+                Navigator.pushNamed(context,'/first');
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 100.0,
@@ -98,7 +95,7 @@ class _LandingPageState extends State<LandingPage> {
               color: Color(0xffF5591F),
               textColor: Colors.white,
               child: Text(
-                "LEARN",
+                "SETTINGS",
                 style: TextStyle(
                   fontSize: 30.0,
                   fontFamily: "Times New Roman",
