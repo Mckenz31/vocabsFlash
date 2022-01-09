@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:vocabs_flash/pages/practicecards.dart';
 import 'pages/flashcards.dart';
 import 'pages/landingpage.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
+        '/practiceCards': (context) => PracticeCards()
       },
       initialRoute: kDebugMode
           ? const String.fromEnvironment('START_PATH', defaultValue: '/')
