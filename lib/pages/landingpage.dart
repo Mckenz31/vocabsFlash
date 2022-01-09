@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'flashcards.dart';
+import 'practicecards.dart';
 
-class LandingPage extends StatefulWidget {
-  @override
-  _LandingPageState createState() => _LandingPageState();
-}
-
-class _LandingPageState extends State<LandingPage> {
-
+class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,15 +10,14 @@ class _LandingPageState extends State<LandingPage> {
         children: <Widget>[
           Container(
             height: 250,
-            width: double.infinity ,
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
               color: Color(0xffF5591F),
               gradient: LinearGradient(
                   colors: [(new Color(0xffF5591F)), (new Color(0xffF2861E))],
                   begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter
-              ),
+                  end: Alignment.bottomCenter),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -34,7 +28,7 @@ class _LandingPageState extends State<LandingPage> {
                   children: [
 
                     IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/fifth');
+                      Navigator.pushNamed(context,'/search');
                     }, icon: Icon(Icons.info_outline),
                       color: Colors.white,),
                   ],
@@ -45,12 +39,10 @@ class _LandingPageState extends State<LandingPage> {
                     style: TextStyle(
                         fontSize: 50.0,
                         fontFamily: "Times New Roman",
-                        color: Colors.white
-                    ),
+                        color: Colors.white),
                   ),
                 ),
-                SizedBox(
-                )
+                SizedBox()
               ],
             ),
           ),
@@ -58,16 +50,16 @@ class _LandingPageState extends State<LandingPage> {
             height: 100,
           ),
           FlatButton(
-            splashColor: Color(0xffF5341F),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-            onPressed: (){
-
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
-            },
             padding: EdgeInsets.symmetric(
-              horizontal: 100.0,
+              horizontal: 50.0,
               vertical: 10.0,
             ),
+            splashColor: Color(0xffF5341F),
+
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
+            },
             color: Color(0xffF5591F),
             textColor: Colors.white,
             child: Text(
@@ -79,14 +71,14 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
           ),
-
           Padding(
-            padding: EdgeInsets.only(left: 20, right:20,top:30),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 30),
             child: FlatButton(
+
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               onPressed: (){
-                // Navigator.pushNamed(context,'/flashCards');
-                Navigator.pushNamed(context,'/first');
+                Navigator.pushNamed(context,'/flashCards');
+
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 100.0,
@@ -105,27 +97,28 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right:20,top:100),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 100),
             child: FlatButton.icon(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-              onPressed: (){
-                Navigator.pushNamed(context,'/third');
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              onPressed: () {
+                Navigator.pushNamed(context, '/search');
               },
               padding: EdgeInsets.symmetric(
                 horizontal: 80.0,
                 vertical: 20.0,
               ),
-
               color: Color(0xffF5591F),
               textColor: Colors.white,
-
               icon: Icon(Icons.search, color: Colors.white),
-              label: Text("BROWSE SEARCH",
+              label: Text(
+                "BROWSE SEARCH",
                 style: TextStyle(
                   fontSize: 20.0,
                   fontFamily: "Times New Roman",
                   fontWeight: FontWeight.w400,
-                ),),
+                ),
+              ),
             ),
           ),
         ],
