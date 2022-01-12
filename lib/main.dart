@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
         '/': (context) => IntroductionPage(),
         '/landingPage' : (context) => LandingPage(),
         '/vocabSets' : (context) => VocabSets(),
-        '/flashCards': (context) => FlashCards(),
+        // '/flashCards': (context) => FlashCards(),
         '/search': (context) => Search(),
         '/practiceCards': (context) => PracticeCards()
       },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vocabs_flash/constants/constants.dart';
+import 'flashcards.dart';
 
 class VocabSets extends StatefulWidget {
   @override
@@ -30,7 +32,8 @@ class _VocabSetsState extends State<VocabSets> {
               margin: EdgeInsets.all(10),
               child: GestureDetector(
                 onTap: (){
-                  Navigator.pushNamed(context, '/flashCards');
+                  // Navigator.pushNamed(context, '/flashCards', arguments: index);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards(index)),);
                 },
                 child: Card(
                   shadowColor: Colors.white12,
@@ -40,7 +43,7 @@ class _VocabSetsState extends State<VocabSets> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        "GRE words",
+                        '${Constants().cardz[index].title}',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold
@@ -49,9 +52,9 @@ class _VocabSetsState extends State<VocabSets> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Learned: 10"),
-                          Text("To revise: 10"),
-                          Text("Unknown: 10"),
+                          Text("Learnt: ${Constants().cardz[index].learnt}"),
+                          Text("In progress: ${Constants().cardz[index].inProcess}"),
+                          Text("Unfamiliar: ${Constants().cardz[index].incomplete}"),
                         ],
                       ),
                       Padding(
@@ -59,7 +62,7 @@ class _VocabSetsState extends State<VocabSets> {
                         child: LinearProgressIndicator(
                           semanticsLabel: "Linear progress indicator",
                           minHeight: 20,
-                          value: 0.33,
+                          value: Constants().cardz[index].progressVal,
                         ),
                       ),
                     ],

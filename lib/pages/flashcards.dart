@@ -3,6 +3,11 @@ import 'package:flip_card/flip_card.dart';
 import '../constants/constants.dart';
 
 class FlashCards extends StatefulWidget {
+
+  final int cardNo;
+
+  FlashCards(this.cardNo);
+
   @override
   _FlashCardsState createState() => _FlashCardsState();
 }
@@ -16,9 +21,9 @@ class _FlashCardsState extends State<FlashCards> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSynonym();
+    print(widget.cardNo);
   }
 
   String getSynonym(){
@@ -37,6 +42,7 @@ class _FlashCardsState extends State<FlashCards> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.cardNo);
     return Scaffold(
       appBar: AppBar(
         title: Title(child: Text('Vocab set 1'), color: Colors.red,),
@@ -121,3 +127,4 @@ class _FlashCardsState extends State<FlashCards> {
     );
   }
 }
+
