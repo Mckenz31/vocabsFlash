@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'flashcards.dart';
-import 'practicecards.dart';
 
 class LandingPage extends StatelessWidget {
   @override
@@ -58,7 +56,7 @@ class LandingPage extends StatelessWidget {
 
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FlashCards()));
+              Navigator.pushNamed(context, '/vocabSets');
             },
             color: Color(0xffF5591F),
             textColor: Colors.white,
@@ -77,7 +75,7 @@ class LandingPage extends StatelessWidget {
 
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               onPressed: (){
-                Navigator.pushNamed(context,'/flashCards');
+                Navigator.pushNamed(context,'/practiceCards');
 
               },
               padding: EdgeInsets.symmetric(
@@ -87,7 +85,7 @@ class LandingPage extends StatelessWidget {
               color: Color(0xffF5591F),
               textColor: Colors.white,
               child: Text(
-                "SETTINGS",
+                "PRACTICE",
                 style: TextStyle(
                   fontSize: 30.0,
                   fontFamily: "Times New Roman",

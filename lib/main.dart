@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
+import 'package:vocabs_flash/pages/vocabsets.dart';
 import 'pages/flashcards.dart';
 import 'pages/intoductionpage.dart';
 import 'package:flutter/foundation.dart';
@@ -30,11 +30,12 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
         /* dark theme settings */
       ),
-      // themeMode: ThemeMode,
+      themeMode: ThemeMode.dark,
       routes: {
         '/': (context) => IntroductionPage(),
         '/landingPage' : (context) => LandingPage(),
-        '/flashCards': (context) => FlashCards(),
+        '/vocabSets' : (context) => VocabSets(),
+        // '/flashCards': (context) => FlashCards(),
         '/search': (context) => Search(),
         '/practiceCards': (context) => PracticeCards()
       },

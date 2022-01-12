@@ -1,3 +1,5 @@
+import 'package:vocabs_flash/constants/card_model.dart';
+
 class Constants {
   var value = [
     {
@@ -54,4 +56,13 @@ class Constants {
       ]
     }
   ];
+
+  List<CardModel> cardz = [
+    CardModel(title: "GRE words", learnt: 10, inProcess: 10, incomplete: 10, progressVal: 0.3),
+    CardModel(title: "TOEFL words", learnt: 15, inProcess: 8, incomplete: 7, progressVal: 0.5),
+    CardModel(title: "IELTS words", learnt: 20, inProcess: 5, incomplete: 5, progressVal: 0.7),
+    CardModel(title: "SAT words", learnt: 19, inProcess: 3, incomplete: 8, progressVal: 0.6),
+    CardModel(title: "GMAT words", learnt: 5, inProcess: 10, incomplete: 15, progressVal: 0.17),
+  ];
+
 }
