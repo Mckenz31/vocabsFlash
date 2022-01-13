@@ -1,7 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vocabs_flash/models/flashcardList.dart';
+import 'package:vocabs_flash/models/flashcards.dart';
 import 'package:vocabs_flash/result.dart';
+import 'package:vocabs_flash/searchInput.dart';
+import 'package:vocabs_flash/localStorage/storageController.dart';
+import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -28,18 +33,20 @@ class _SearchState extends State<Search> {
                       .sublist(0, 4)
                   : jsonData[0]['meanings'][0]['definitions'][0]['antonyms']
               : ['No Antonyms Found'],
-          synonyms: jsonData[0]['meanings'][0]['definitions'][0].containsKey('synonyms') &&
+          synonyms: jsonData[0]['meanings'][0]['definitions'][0]
+                      .containsKey('synonyms') &&
                   jsonData[0]['meanings'][0]['definitions'][0]['synonyms'].length >
                       0
-              ? jsonData[0]['meanings'][0]['definitions'][0]['synonyms'].length > 4 ? jsonData[0]['meanings'][0]['definitions'][0]['synonyms'].sublist(0, 4) : jsonData[0]['meanings'][0]['definitions'][0]['synonyms']
-                  
+              ? jsonData[0]['meanings'][0]['definitions'][0]['synonyms'].length >
+                      4
+                  ? jsonData[0]['meanings'][0]['definitions'][0]['synonyms']
+                      .sublist(0, 4)
+                  : jsonData[0]['meanings'][0]['definitions'][0]['synonyms']
               : ['No Synonyms Found'],
           example: jsonData[0]['meanings'][0]['definitions'][0].containsKey('example')
               ? jsonData[0]['meanings'][0]['definitions'][0]['example']
               : 'No Example Found',
-          origin: jsonData[0]['meanings'][0].containsKey('origin')
-              ? jsonData[0]['meanings'][0]['origin']
-              : 'No Origin Found');
+          origin: jsonData[0]['meanings'][0].containsKey('origin') ? jsonData[0]['meanings'][0]['origin'] : 'No Origin Found');
     });
     print(result.antonyms);
   }
@@ -47,6 +54,13 @@ class _SearchState extends State<Search> {
   TextEditingController _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print('hello');
+    List<FlashCardsModel> card =
+        context.select((StorageController controller) => controller.user);
+    print(card);
+    // print('${card[0].meaning} : ${card[0].meaning}');
+    print("end");
+
     return Container(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -58,36 +72,14 @@ class _SearchState extends State<Search> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                        hintText: "Enter the word here",
-                        labelText: "Search",
-                        labelStyle:
-                            TextStyle(fontSize: 24, color: Colors.black),
-                        border: OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () => getMeaning(_searchController.text),
-                        )),
-                    maxLength: 15,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text('Word : ' + _searchController.text,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  SizedBox(
-                    height: 15,
-                  ),
+                  SearchInput(_searchController, getMeaning),
                   result != null ? Result(result) : Text(''),
                 ],
               ),
             )),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Add your onPressed code here!
+            context.read<StorageController>().writeUser();
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.add),

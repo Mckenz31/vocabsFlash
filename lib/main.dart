@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:vocabs_flash/localStorage/storageController.dart';
 import 'pages/flashcards.dart';
 import 'pages/landingpage.dart';
 import 'package:vocabs_flash/search.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => StorageController())],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -16,6 +21,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    context.read<StorageController>().readUser();
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -27,7 +33,7 @@ class _MyAppState extends State<MyApp> {
         brightness: Brightness.dark,
         /* dark theme settings */
       ),
-      themeMode: ThemeMode.dark,
+      // themeMode: ThemeMode.dark,
       routes: {
         '/': (context) => LandingPage(),
         '/flashCards': (context) => FlashCards(),
