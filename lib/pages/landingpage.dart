@@ -24,11 +24,17 @@ class LandingPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
-                    IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/search');
-                    }, icon: Icon(Icons.info_outline),
-                      color: Colors.white,),
+                    IconButton(
+                      onPressed: () {
+                        showAboutDialog(
+                            context: context,
+                            applicationName: "vocabs_flash",
+                            applicationLegalese:
+                                "Fun and effective way to learn vocabulary\nCopyright 2020 Mckenzie Lionel Joseph et al.");
+                      },
+                      icon: Icon(Icons.info_outline),
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 Container(
