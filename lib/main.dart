@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:vocabs_flash/pages/vocabsets.dart';
-import 'pages/flashcards.dart';
 import 'pages/intoductionpage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vocabs_flash/pages/practicecards.dart';
 import 'pages/landingpage.dart';
 import 'package:vocabs_flash/search.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:hive/hive.dart';
+import 'models/vocabData_model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDir.path);
+  Hive.registerAdapter(VocabDataAdapter());
+  await Hive.openBox('vocabSets');
   runApp(MyApp());
 }
 

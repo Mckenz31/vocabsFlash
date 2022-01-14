@@ -1,4 +1,4 @@
-import 'package:vocabs_flash/constants/card_model.dart';
+import 'package:vocabs_flash/models/card_model.dart';
 
 class Constants {
   var value = [

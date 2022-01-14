@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vocabs_flash/result.dart';
+import 'package:hive/hive.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+
   Meaning result;
   Future getMeaning(String word) async {
     var response = await http
@@ -87,7 +89,7 @@ class _SearchState extends State<Search> {
             )),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Add your onPressed code here!
+            //
           },
           backgroundColor: Colors.green,
           child: const Icon(Icons.add),
