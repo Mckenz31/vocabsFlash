@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:vocabs_flash/result.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -12,6 +13,9 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
 
   Meaning result;
+  String dropDownVal = "Select a set";
+  final sets = Hive.box('vocabSets');
+
   Future getMeaning(String word) async {
     var response = await http
         .get(Uri.https('api.dictionaryapi.dev', 'api/v2/entries/en/$word'));
@@ -86,13 +90,37 @@ class _SearchState extends State<Search> {
                   result != null ? Result(result) : Text(''),
                 ],
               ),
-            )),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            //
-          },
-          backgroundColor: Colors.green,
-          child: const Icon(Icons.add),
+            ),
+        ),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(left: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DropdownButton(
+                dropdownColor: Colors.red,
+                value: dropDownVal,
+                onChanged: (value){
+                  setState(() {
+                    dropDownVal = value;
+                  });
+                },
+                items: <String>['Select a set']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: (){
+                  print(sets.getAt(0));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
