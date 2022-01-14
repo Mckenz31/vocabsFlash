@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:vocabs_flash/models/vocabSet_model.dart';
 import 'package:vocabs_flash/result.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -13,7 +13,8 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
 
   Meaning result;
-  String dropDownVal = "Select a set";
+  String dropDownVal = 'Select a set';
+  List<String> dropDownItems = ['Select a set'];
   final sets = Hive.box('vocabSets');
 
   Future getMeaning(String word) async {
@@ -50,7 +51,17 @@ class _SearchState extends State<Search> {
     print(result.antonyms);
   }
 
+
   TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    for(int i=0; i<sets.length; i++){
+      dropDownItems.add(sets.getAt(i));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,7 +116,7 @@ class _SearchState extends State<Search> {
                     dropDownVal = value;
                   });
                 },
-                items: <String>['Select a set']
+                items: dropDownItems
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -116,7 +127,21 @@ class _SearchState extends State<Search> {
               FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: (){
-                  print(sets.getAt(0));
+                  if(dropDownVal != 'Select a set' && _searchController.text != null){
+                    final setName = Hive.box(dropDownVal);
+                    final values = VocabSetModel(word: result.word, meaning: result.meanings, learnt: false, inProcess: false, inComplete: true, synonym: result.synonyms, antonym: result.antonyms, example: result.example, audioURL: result.audioUrl);
+                    setName.add(values);
+                    final snackBar = SnackBar(content: Text('Word added'),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                  else{
+                    final snackBar = SnackBar(content: Text('Select a set from the dropdown list. If no set exist, create a new set in the flashcards page. Then come back and select the set'),
+                      backgroundColor: Colors.red,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
               ),
             ],
@@ -130,8 +155,7 @@ class _SearchState extends State<Search> {
 class Meaning {
   final String word, audioUrl, meanings, example, origin;
   List<dynamic> antonyms, synonyms;
-  Meaning(
-      {this.word,
+  Meaning({this.word,
       this.meanings,
       this.audioUrl,
       this.example,

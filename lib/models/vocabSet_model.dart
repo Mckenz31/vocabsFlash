@@ -1,9 +1,9 @@
 import 'package:hive/hive.dart';
 
-part 'vocabData_model.g.dart';
+part 'vocabSet_model.g.dart';
 
-@HiveType(typeId: 0)
-class VocabData {
+@HiveType(typeId: 2)
+class VocabSetModel {
   @HiveField(0)
   String word;
 
@@ -26,19 +26,19 @@ class VocabData {
   String audioURL;
 
   @HiveField(7)
-  List<String> synonym;
+  List<dynamic> synonym;
 
   @HiveField(8)
-  List<String> antonym;
+  List<dynamic> antonym;
 
-  VocabData(
+  VocabSetModel(
       {this.word,
-      this.learnt,
-      this.inProcess,
-      this.inComplete,
-      this.meaning,
-      this.example,
-      this.audioURL,
-      this.antonym,
-      this.synonym});
+        this.learnt,
+        this.inProcess,
+        this.inComplete,
+        this.meaning,
+        this.example,
+        this.audioURL,
+        this.antonym,
+        this.synonym});
 }

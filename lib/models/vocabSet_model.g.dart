@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'vocabData_model.dart';
+part of 'vocabSet_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VocabDataAdapter extends TypeAdapter<VocabData> {
+class VocabSetModelAdapter extends TypeAdapter<VocabSetModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 2;
 
   @override
-  VocabData read(BinaryReader reader) {
+  VocabSetModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return VocabData(
+    return VocabSetModel(
       word: fields[0] as String,
       learnt: fields[1] as bool,
       inProcess: fields[2] as bool,
@@ -24,13 +24,13 @@ class VocabDataAdapter extends TypeAdapter<VocabData> {
       meaning: fields[4] as String,
       example: fields[5] as String,
       audioURL: fields[6] as String,
-      antonym: (fields[8] as List)?.cast<String>(),
-      synonym: (fields[7] as List)?.cast<String>(),
+      antonym: (fields[8] as List)?.cast<dynamic>(),
+      synonym: (fields[7] as List)?.cast<dynamic>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, VocabData obj) {
+  void write(BinaryWriter writer, VocabSetModel obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
@@ -59,7 +59,7 @@ class VocabDataAdapter extends TypeAdapter<VocabData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VocabDataAdapter &&
+      other is VocabSetModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
