@@ -1,4 +1,3 @@
-import 'package:hive/hive.dart';
 import 'package:vocabs_flash/main.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +36,7 @@ class IntroductionPage extends StatelessWidget {
             color: Colors.black,
           ),),
           showNextButton: false,
-          onDone: () async {
-            await Hive.box('settings').put('isFirstTime', false);
+          onDone: (){
             Navigator.pushNamed(context, '/landingPage');
           },
           pages: listViewModel,
