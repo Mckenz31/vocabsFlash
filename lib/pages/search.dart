@@ -128,7 +128,7 @@ class _SearchState extends State<Search> {
                 child: Icon(Icons.add),
                 onPressed: (){
                   if(dropDownVal != 'Select a set' && _searchController.text != null){
-                    final setName = Hive.box(dropDownVal);
+                    final setName = Hive.box<VocabSetModel>(dropDownVal);
                     final values = VocabSetModel(word: result.word, meaning: result.meanings, learnt: false, inProcess: false, inComplete: true, synonym: result.synonyms, antonym: result.antonyms, example: result.example, audioURL: result.audioUrl);
                     setName.add(values);
                     final snackBar = SnackBar(content: Text('Word added'),

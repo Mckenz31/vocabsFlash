@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vocabs_flash/search.dart';
+import 'pages/search.dart';
 
 class Result extends StatelessWidget {
   final Meaning result;

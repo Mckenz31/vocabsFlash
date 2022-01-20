@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
+import 'package:vocabs_flash/models/vocabSet_model.dart';
 import '../constants/constants.dart';
+import 'package:hive/hive.dart';
 
 class FlashCards extends StatefulWidget {
 
@@ -13,6 +15,9 @@ class FlashCards extends StatefulWidget {
 }
 
 class _FlashCardsState extends State<FlashCards> {
+
+  String setName;
+  Box<VocabSetModel> setBox;
   String val = Constants().value[0]['word'];
   String meaning = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[0]['definition'];
   String example = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[0]['example'];
@@ -24,6 +29,10 @@ class _FlashCardsState extends State<FlashCards> {
     super.initState();
     getSynonym();
     print(widget.cardNo);
+    setName = Hive.box('vocabSets').getAt(widget.cardNo);
+    print(setName);
+    Hive.openBox<VocabSetModel>(setName);
+    setBox = Hive.box<VocabSetModel>(setName);
   }
 
   String getSynonym(){
@@ -63,7 +72,7 @@ class _FlashCardsState extends State<FlashCards> {
                   front: Container(
                     margin: EdgeInsets.all(10),
                     color: Color(0xffF5591F),
-                    child: Center(child: Text(val, style: TextStyle(fontSize: 100,),)),
+                    child: Center(child: Text(setBox.getAt(0).word, style: TextStyle(fontSize: 100,),)),
                   ),
                   back: Container(
                     margin: EdgeInsets.all(10),
@@ -72,9 +81,9 @@ class _FlashCardsState extends State<FlashCards> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('Meaning: ' +meaning, style: TextStyle(fontSize: 22),),
+                        Text('Meaning: ' +setBox.getAt(0).meaning, style: TextStyle(fontSize: 22),),
                         SizedBox(height: 20,),
-                        Text('  Example: ' +example, style: TextStyle(fontSize: 22),),
+                        Text('  Example: ' +setBox.getAt(0).example, style: TextStyle(fontSize: 22),),
                         SizedBox(height: 20,),
                         // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
                         synonym != null ? Text('Synonym: ' +s1 +" ," +s2 +" ," +s3 +" ," +s4 +" ," +s5 +" ," +s6, style: TextStyle(fontSize: 20),) : Text("")
