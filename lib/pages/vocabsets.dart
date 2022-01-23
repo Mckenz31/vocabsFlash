@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:vocabs_flash/constants/constants.dart';
 import 'flashcards.dart';
 import 'package:vocabs_flash/models/vocabSet_model.dart';
 import 'package:provider/provider.dart';
@@ -16,16 +15,11 @@ class _VocabSetsState extends State<VocabSets> {
   String setName;
   Box<VocabSetModel> indivBox;
   final setData = Hive.box('vocabSets');
-  int learnt, inProgress, unFamiliar;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   for(int i=0; i<setData.length; i++){
-  //     Hive.box(setData.name);
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +93,9 @@ class _VocabSetsState extends State<VocabSets> {
                                     formKey.currentState.save();
                                     print(setData.length);
                                     setData.put(setData.length, setName);
-                                    Provider.of<HiveNewSet>(context, listen: false).newBox(setName);
+                                    Provider.of<HiveNewSet>(context,
+                                            listen: false)
+                                        .newBox(setName);
                                     final snackBar = SnackBar(
                                       content: Text('Set: $setName'),
                                       backgroundColor: Colors.lightBlueAccent,
@@ -138,69 +134,78 @@ class _VocabSetsState extends State<VocabSets> {
         child: ValueListenableBuilder(
           valueListenable: Hive.box('vocabSets').listenable(),
           builder: (context, setsBox, widget) {
-            return ListView.builder(
-                itemCount: setsBox.length,
-                itemBuilder: (context, index) {
-                  indivBox = Hive.box<VocabSetModel>(setsBox.getAt(index));
-                  return Container(
-                    height: MediaQuery.of(context).size.height / 4,
-                    // color: Colors.white24,
-                    margin: EdgeInsets.all(10),
-                    child: GestureDetector(
-                      onTap: () {
-                        // Navigator.pushNamed(context, '/flashCards', arguments: index);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FlashCards(index)),
-                        );
-                      },
-                      child: Card(
-                        shadowColor: Colors.white12,
-                        elevation: 10,
-                        color: Colors.white24,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              '${setsBox.getAt(index)}',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            indivBox.length > 0
-                                ?
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                      "Learnt: ${Constants().cardz[index].learnt}"),
-                                  Text(
-                                      "In progress: ${Constants().cardz[index].inProcess}"),
-                                  Text(
-                                      "Unfamiliar: ${Constants().cardz[index].incomplete}"),
-                                ],
-                              )
-                                :
-                              Text("No Flash Cards Created Yet"),
-
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 18.0, right: 18.0),
-                              child: LinearProgressIndicator(
-                                semanticsLabel: "Linear progress indicator",
-                                minHeight: 20,
-                                value: Constants().cardz[index].progressVal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                });
+            return buildListView(setsBox);
           },
         ),
       ),
     );
+  }
+
+  ListView buildListView(setsBox) {
+    int inProgress = 0, learnt = 0, unFamiliar = 0;
+    int total = 0;
+    double value;
+    return ListView.builder(
+        itemCount: setsBox.length,
+        itemBuilder: (context, index) {
+          indivBox = Hive.box<VocabSetModel>(setsBox.getAt(index));
+          for(int i=0; i<indivBox.length; i++){
+            if(indivBox.getAt(i).inProcess)
+              inProgress++;
+            else if(indivBox.getAt(i).learnt)
+              learnt++;
+            else
+              unFamiliar++;
+          }
+          total = learnt + inProgress + unFamiliar;
+          value = total==0 ? 0 : learnt/total;
+          return Container(
+            height: MediaQuery.of(context).size.height / 4,
+            // color: Colors.white24,
+            margin: EdgeInsets.all(10),
+            child: GestureDetector(
+              onTap: () {
+                // Navigator.pushNamed(context, '/flashCards', arguments: index);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FlashCards(index)),
+                );
+              },
+              child: Card(
+                shadowColor: Colors.white12,
+                elevation: 10,
+                color: Colors.white24,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      '${setsBox.getAt(index)}',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    indivBox.length > 0
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text("Learnt: $learnt"),
+                              Text("In progress: $inProgress"),
+                              Text("Unknown: $unFamiliar"),
+                            ],
+                          )
+                        : Text("No Flash Cards Created Yet"),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+                      child: LinearProgressIndicator(
+                        semanticsLabel: "Linear progress indicator",
+                        minHeight: 20,
+                        value: value,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
