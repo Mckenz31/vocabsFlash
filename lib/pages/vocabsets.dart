@@ -134,78 +134,82 @@ class _VocabSetsState extends State<VocabSets> {
         child: ValueListenableBuilder(
           valueListenable: Hive.box('vocabSets').listenable(),
           builder: (context, setsBox, widget) {
-            return buildListView(setsBox);
+            return ListView.builder(
+                itemCount: setsBox.length,
+                itemBuilder: (context, index) {
+                  int inProgress = 0, learnt = 0, unFamiliar = 0;
+                  int total = 0;
+                  double value;
+                  indivBox = Hive.box<VocabSetModel>(setsBox.getAt(index));
+                  for (int i = 0; i < indivBox.length; i++) {
+                    if (indivBox.getAt(i).inProcess)
+                      inProgress++;
+                    else if (indivBox.getAt(i).learnt)
+                      learnt++;
+                    else
+                      unFamiliar++;
+                  }
+                  total = learnt + inProgress + unFamiliar;
+                  value = total == 0 ? 0 : learnt / total;
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 4,
+                    // color: Colors.white24,
+                    margin: EdgeInsets.all(10),
+                    child: GestureDetector(
+                      onTap: () {
+                        // Navigator.pushNamed(context, '/flashCards', arguments: index);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FlashCards(index)),
+                        ).then((_) {
+                          // This block runs when you have returned back to the 1st Page from 2nd.
+                          setState(() {
+                            // Call setState to refresh the page.
+                          });
+                        });
+                      },
+                      child: Card(
+                        shadowColor: Colors.white12,
+                        elevation: 10,
+                        color: Colors.white24,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              '${setsBox.getAt(index)}',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            indivBox.length > 0
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text("Learnt: $learnt"),
+                                      Text("In progress: $inProgress"),
+                                      Text("Unknown: $unFamiliar"),
+                                    ],
+                                  )
+                                : Text("No Flash Cards Created Yet"),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 18.0, right: 18.0),
+                              child: LinearProgressIndicator(
+                                semanticsLabel: "Linear progress indicator",
+                                minHeight: 20,
+                                value: value,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                });
           },
         ),
       ),
     );
-  }
-
-  ListView buildListView(setsBox) {
-    int inProgress = 0, learnt = 0, unFamiliar = 0;
-    int total = 0;
-    double value;
-    return ListView.builder(
-        itemCount: setsBox.length,
-        itemBuilder: (context, index) {
-          indivBox = Hive.box<VocabSetModel>(setsBox.getAt(index));
-          for(int i=0; i<indivBox.length; i++){
-            if(indivBox.getAt(i).inProcess)
-              inProgress++;
-            else if(indivBox.getAt(i).learnt)
-              learnt++;
-            else
-              unFamiliar++;
-          }
-          total = learnt + inProgress + unFamiliar;
-          value = total==0 ? 0 : learnt/total;
-          return Container(
-            height: MediaQuery.of(context).size.height / 4,
-            // color: Colors.white24,
-            margin: EdgeInsets.all(10),
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, '/flashCards', arguments: index);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FlashCards(index)),
-                );
-              },
-              child: Card(
-                shadowColor: Colors.white12,
-                elevation: 10,
-                color: Colors.white24,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      '${setsBox.getAt(index)}',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    indivBox.length > 0
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text("Learnt: $learnt"),
-                              Text("In progress: $inProgress"),
-                              Text("Unknown: $unFamiliar"),
-                            ],
-                          )
-                        : Text("No Flash Cards Created Yet"),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18.0, right: 18.0),
-                      child: LinearProgressIndicator(
-                        semanticsLabel: "Linear progress indicator",
-                        minHeight: 20,
-                        value: value,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
   }
 }
