@@ -15,6 +15,9 @@ class FlashCards extends StatefulWidget {
 }
 
 class _FlashCardsState extends State<FlashCards> {
+  List<int> values = [];
+  List<int> valCheck = [];
+  bool completed = false;
   int val;
   String setName;
   Box<VocabSetModel> setBox;
@@ -38,7 +41,22 @@ class _FlashCardsState extends State<FlashCards> {
     Hive.openBox<VocabSetModel>(setName);
     setBox = Hive.box<VocabSetModel>(setName);
     print(setBox.getAt(0).synonym[0]);
+    for(int i=0; i<setBox.length; i++){
+      if(setBox.getAt(i).learnt == true){
+        //
+      }
+      else{
+        valCheck.add(i);
+      }
+    }
+    if(valCheck.length == 0)
+      completed = true;
   }
+
+  // @override
+  // void dispose(){
+  //   Hive.close();
+  // }
 
   play(String url) async {
     await audioPlayer.play("https://" +url);
@@ -55,28 +73,37 @@ class _FlashCardsState extends State<FlashCards> {
           color: Colors.red,
         ),
       ),
-      body: Column(
-        children: [
-          Flexible(
-            flex: 15,
-            child: Container(
-              child: Center(
-                child: buildFlipCard(),
-              ),
+      body: buildColumn(),
+    );
+  }
+
+  Column buildColumn() {
+    return Column(
+      children: [
+        Flexible(
+          flex: 15,
+          child: Container(
+            child: Center(
+              child: buildFlipCard(),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        completed ?
+          Container() :
           Flexible(
             flex: 1,
             child: Container(
               child: Text('Familiar with the term?'),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
+        SizedBox(
+          height: 10,
+        ),
+        completed ?
+          Container() :
           Flexible(
             flex: 2,
             child: Container(
@@ -90,10 +117,8 @@ class _FlashCardsState extends State<FlashCards> {
                             Colors.green[500])),
                     onPressed: () {
                       setState(() {
-                        setBox.getAt(val).learnt = true;
-                        setBox.getAt(val).inProcess = false;
-                        setBox.getAt(val).inComplete = false;
-                        buildFlipCard();
+                        setBox.putAt(val, VocabSetModel(learnt: true, inProcess: false, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                        buildColumn();
                       });
                     },
                   ),
@@ -104,10 +129,8 @@ class _FlashCardsState extends State<FlashCards> {
                             MaterialStateProperty.all<Color>(Colors.orange)),
                     onPressed: () {
                       setState(() {
-                        setBox.getAt(val).inProcess = true;
-                        setBox.getAt(val).learnt = false;
-                        setBox.getAt(val).inComplete = false;
-                        buildFlipCard();
+                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                        buildColumn();
                       });
                     },
                   ),
@@ -118,10 +141,8 @@ class _FlashCardsState extends State<FlashCards> {
                         MaterialStateProperty.all<Color>(Colors.red)),
                     onPressed: () {
                       setState(() {
-                        setBox.getAt(val).inProcess = false;
-                        setBox.getAt(val).learnt = false;
-                        setBox.getAt(val).inComplete = true;
-                        buildFlipCard();
+                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                        buildColumn();
                       });
                     },
                   ),
@@ -129,13 +150,12 @@ class _FlashCardsState extends State<FlashCards> {
               ),
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
 
-  FlipCard buildFlipCard() {
-    List<int> values = [];
+   buildFlipCard() {
+    values.clear();
     for(int i=0; i<setBox.length; i++){
       if(setBox.getAt(i).learnt == true){
         //
@@ -145,13 +165,15 @@ class _FlashCardsState extends State<FlashCards> {
       }
     }
     if(values.length == 0){
-      final snackBar = SnackBar(
-        content: Text('The set is completed'),
-        backgroundColor: Colors.green,
-      );
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(snackBar);
+      // final snackBar = SnackBar(
+      //   content: Text('The set is completed'),
+      //   backgroundColor: Colors.green,
+      // );
+      completed = true;
+      return Container(child: Text("Completed"),);
+      // Navigator.pop(context);
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(snackBar);
     }
     else{
       Random random = new Random();
