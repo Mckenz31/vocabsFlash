@@ -18,11 +18,11 @@ class _FlashCardsState extends State<FlashCards> {
   List<int> values = [];
   List<int> valCheck = [];
   bool completed = false;
+  bool wordsAvailable = false;
   int val;
   String setName;
   Box<VocabSetModel> setBox;
   AudioPlayer audioPlayer = AudioPlayer();
-  // String synonym = ((Constants().value[0]['meanings'] as List<dynamic>)[1]['definitions'] as List<dynamic>)[1]['synonym'];
   String s1 = "",
       s2 = "",
       s3 = "",
@@ -40,7 +40,9 @@ class _FlashCardsState extends State<FlashCards> {
     print(setName);
     Hive.openBox<VocabSetModel>(setName);
     setBox = Hive.box<VocabSetModel>(setName);
-    print(setBox.getAt(0).synonym[0]);
+    if(setBox.length > 0){
+      wordsAvailable = true;
+    }
     for(int i=0; i<setBox.length; i++){
       if(setBox.getAt(i).learnt == true){
         //
@@ -69,9 +71,42 @@ class _FlashCardsState extends State<FlashCards> {
     return Scaffold(
       appBar: AppBar(
         title: Title(
-          child: Text('Vocab set 1'),
+          child: Text(setName),
           color: Colors.red,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: PopupMenuButton(
+              child: Icon(Icons.menu),
+              // color: Colors.green,
+              itemBuilder: (context) => [
+                PopupMenuItem<int>(
+                  value: 0,
+                  child: Text("Start learning again"),
+                  onTap: (){
+                    setState(() {
+                      for(int i = 0; i<setBox.length; i++){
+                        setBox.putAt(i, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(i).meaning, example: setBox.getAt(i).example, word: setBox.getAt(i).word, audioURL: setBox.getAt(i).audioURL, synonym: setBox.getAt(i).synonym, antonym: setBox.getAt(i).antonym));
+                        completed = false;
+                        buildColumn();
+                      }
+                    });
+                  },
+                ),
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Text("Delete word"),
+                  onTap: (){
+                    setState(() {
+                      setBox.deleteAt(val);
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: buildColumn(),
     );
@@ -170,7 +205,7 @@ class _FlashCardsState extends State<FlashCards> {
       //   backgroundColor: Colors.green,
       // );
       completed = true;
-      return Container(child: Text("Completed"),);
+      return wordsAvailable ? Container(child: Text("Completed"),) : Container(child: Center(child: Text("Go to -> Browse words page -> add words")),);
       // Navigator.pop(context);
       // ScaffoldMessenger.of(context)
       //     .showSnackBar(snackBar);
