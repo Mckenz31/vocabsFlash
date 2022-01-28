@@ -4,6 +4,7 @@ import 'flashcards.dart';
 import 'package:vocabs_flash/models/vocabSet_model.dart';
 import 'package:provider/provider.dart';
 import 'package:vocabs_flash/providers/hivenewset_provider.dart';
+import 'dart:async';
 
 class VocabSets extends StatefulWidget {
   @override
@@ -38,87 +39,90 @@ class _VocabSetsState extends State<VocabSets> {
                 showModalBottomSheet(
                   isScrollControlled: true,
                   context: context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0)),
+                  ),
                   builder: (BuildContext context) {
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: MediaQuery.of(context).viewInsets,
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
-                          height: 200,
-                          color: Colors.white,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Create a new vocab set',
+                    return Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: Container(
+                        child: Column(
+                          // crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Create a new vocab set',
+                                style: TextStyle(
+                                  // color: Colors.black,
+                                )),
+                            SizedBox(height: 10,),
+                            Form(
+                              key: formKey,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 30.0),
+                                child: TextFormField(
                                   style: TextStyle(
-                                    color: Colors.black,
-                                  )),
-                              Form(
-                                key: formKey,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 30.0),
-                                  child: TextFormField(
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 0.0),
-                                      ),
-                                      labelText: 'Vocab set name',
-                                    ),
-                                    validator: (value) {
-                                      if (value.length < 2) {
-                                        return 'Enter at least 2 characters';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    onChanged: (value) {
-                                      setState(() {
-                                        setName = value;
-                                      });
-                                    },
+                                    // color: Colors.black,
                                   ),
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.white, width: 5.0),
+                                    ),
+                                    labelText: 'Vocab set name',
+                                  ),
+                                  validator: (value) {
+                                    if (value.length < 2) {
+                                      return 'Enter at least 2 characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    setState(() {
+                                      setName = value;
+                                    });
+                                  },
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  final isValid =
-                                      formKey.currentState.validate();
-                                  if (isValid) {
-                                    formKey.currentState.save();
-                                    print(setData.length);
-                                    setData.put(setData.length, setName);
-                                    Provider.of<HiveNewSet>(context,
-                                            listen: false)
-                                        .newBox(setName);
-                                    final snackBar = SnackBar(
-                                      content: Text('Set: $setName'),
-                                      backgroundColor: Colors.lightBlueAccent,
-                                    );
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                final isValid =
+                                    formKey.currentState.validate();
+                                if (isValid) {
+                                  formKey.currentState.save();
+                                  setData.add(setName);
+                                  Provider.of<HiveNewSet>(context,
+                                          listen: false)
+                                      .newBox(setName);
+                                  final snackBar = SnackBar(
+                                    content: Text('Set: $setName'),
+                                    backgroundColor: Colors.lightBlueAccent,
+                                  );
+                                  Future.delayed(const Duration(milliseconds: 500), () {
                                     Navigator.pop(context);
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBar);
-                                  }
-                                },
-                                child: Text(
-                                  'Submit',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.red),
+                                  });
+                                }
+                              },
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                  color: Colors.black,
                                 ),
                               ),
-                            ],
-                          ),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.blue),
+                              ),
+                            ),
+                            SizedBox(height: 10,)
+                          ],
                         ),
                       ),
                     );

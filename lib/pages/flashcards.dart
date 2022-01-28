@@ -19,6 +19,7 @@ class _FlashCardsState extends State<FlashCards> {
   List<int> valCheck = [];
   bool completed = false;
   bool wordsAvailable = false;
+  String currentFlashCard = "";
   int val;
   String setName;
   Box<VocabSetModel> setBox;
@@ -54,11 +55,6 @@ class _FlashCardsState extends State<FlashCards> {
     if(valCheck.length == 0)
       completed = true;
   }
-
-  // @override
-  // void dispose(){
-  //   Hive.close();
-  // }
 
   play(String url) async {
     await audioPlayer.play("https://" +url);
@@ -100,6 +96,17 @@ class _FlashCardsState extends State<FlashCards> {
                   onTap: (){
                     setState(() {
                       setBox.deleteAt(val);
+                    });
+                  },
+                ),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: Text("Delete entire set"),
+                  onTap: (){
+                    setState(() {
+                      setBox.clear();
+                      Hive.box('vocabSets').deleteAt(widget.cardNo);
+                      Navigator.pop(context);
                     });
                   },
                 ),
@@ -165,7 +172,7 @@ class _FlashCardsState extends State<FlashCards> {
                     onPressed: () {
                       setState(() {
                         setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                        buildColumn();
+                        // buildColumn();
                       });
                     },
                   ),
@@ -177,7 +184,6 @@ class _FlashCardsState extends State<FlashCards> {
                     onPressed: () {
                       setState(() {
                         setBox.putAt(val, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                        buildColumn();
                       });
                     },
                   ),
@@ -195,97 +201,98 @@ class _FlashCardsState extends State<FlashCards> {
       if(setBox.getAt(i).learnt == true){
         //
       }
+      else if(setBox.getAt(i).word == currentFlashCard){
+        print("SAMEEEEEEE");
+      }
       else{
+        print("1 :" +setBox.getAt(i).word);
+        print("2 :" +currentFlashCard);
         values.add(i);
       }
     }
     if(values.length == 0){
-      // final snackBar = SnackBar(
-      //   content: Text('The set is completed'),
-      //   backgroundColor: Colors.green,
-      // );
       completed = true;
       return wordsAvailable ? Container(child: Text("Completed"),) : Container(child: Center(child: Text("Go to -> Browse words page -> add words")),);
-      // Navigator.pop(context);
-      // ScaffoldMessenger.of(context)
-      //     .showSnackBar(snackBar);
     }
     else{
       Random random = new Random();
       // val = random.nextInt(values.length - 1);
+      print(values);
       val = values[random.nextInt(values.length)];
+      currentFlashCard = setBox.getAt(val).word;
       return FlipCard(
-        fill: Fill
-            .fillBack, // Fill the back side of the card to make in the same size as the front.
-        direction: FlipDirection.HORIZONTAL, // default
-        front: Container(
-          width: double.infinity,
-          margin: EdgeInsets.all(10),
-          color: Color(0xffF5591F),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(
-                setBox.getAt(val).word,
-                style: TextStyle(
-                  fontSize: 100,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // audioPlayer.play(setBox.getAt(0).audioURL);
-                  play(setBox.getAt(val).audioURL);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.speaker_phone,
-                    size: 50,
+          fill: Fill
+              .fillBack, // Fill the back side of the card to make in the same size as the front.
+          direction: FlipDirection.HORIZONTAL, // default
+          front: Container(
+            width: double.infinity,
+            margin: EdgeInsets.all(10),
+            color: Color(0xffF5591F),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  setBox.getAt(val).word,
+                  style: TextStyle(
+                    fontSize: 100,
                   ),
                 ),
-              ),
-            ],
+                GestureDetector(
+                  onTap: () {
+                    // audioPlayer.play(setBox.getAt(0).audioURL);
+                    play(setBox.getAt(val).audioURL);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.volume_up,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        back: Container(
-          margin: EdgeInsets.all(10),
-          color: Color(0xffF5591F),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Meaning: ' + setBox.getAt(val).meaning,
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                '  Example: ' + setBox.getAt(val).example,
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
-              setBox.getAt(val).synonym[0] != "No Synonyms Found"
-                  ? Text(
-                'Synonym: ' +
-                    setBox.getAt(val).synonym[0] +
-                    " ," +
-                    setBox.getAt(val).synonym[1] +
-                    " ," +
-                    setBox.getAt(val).synonym[2] +
-                    " ," +
-                    setBox.getAt(val).synonym[3],
-                style: TextStyle(fontSize: 20),
-              )
-                  : Text("")
-            ],
+          back: Container(
+            margin: EdgeInsets.all(10),
+            color: Color(0xffF5591F),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Meaning: ' + setBox.getAt(val).meaning,
+                  style: TextStyle(fontSize: 22),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  '  Example: ' + setBox.getAt(val).example,
+                  style: TextStyle(fontSize: 22),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
+                setBox.getAt(val).synonym[0] != "No Synonyms Found"
+                    ? Text(
+                  'Synonym: ' +
+                      setBox.getAt(val).synonym[0] +
+                      " ," +
+                      setBox.getAt(val).synonym[1] +
+                      " ," +
+                      setBox.getAt(val).synonym[2] +
+                      " ," +
+                      setBox.getAt(val).synonym[3],
+                  style: TextStyle(fontSize: 20),
+                )
+                    : Text("")
+              ],
+            ),
           ),
-        ),
-      );
+        );
     }
   }
 }
+
