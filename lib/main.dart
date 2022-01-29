@@ -37,9 +37,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: val ? Hive.openBox<VocabSetModel>(Provider.of<HiveNewSet>(context).hiveBox) : Hive.openBox(Provider.of<HiveNewSet>(context).hiveBox) ,
+      future: val ? Hive.openBox<VocabSetModel>(Provider.of<HiveNewSet>(context).hiveBox) : Hive.openBox(Provider.of<HiveNewSet>(context).hiveBox),
       builder: (context, snapshot) {
-        if(val == false){
+        if(snapshot.hasData){
           final generateBoxes =Hive.box('vocabSets');
           for(int i=0; i<generateBoxes.length; i++){
             Hive.openBox<VocabSetModel>(generateBoxes.getAt(i));
