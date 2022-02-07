@@ -43,10 +43,7 @@ class _SearchState extends State<Search> {
               : ['No Synonyms Found'],
           example: jsonData[0]['meanings'][0]['definitions'][0].containsKey('example')
               ? jsonData[0]['meanings'][0]['definitions'][0]['example']
-              : 'No Example Found',
-          origin: jsonData[0]['meanings'][0].containsKey('origin')
-              ? jsonData[0]['meanings'][0]['origin']
-              : 'No Origin Found');
+              : "No Example Found",);
     });
     print(result.antonyms);
   }
@@ -88,6 +85,9 @@ class _SearchState extends State<Search> {
                           onPressed: () => getMeaning(_searchController.text),
                         )),
                     maxLength: 15,
+                    onSubmitted: (value){
+                      getMeaning(_searchController.text);
+                    },
                   ),
                   SizedBox(
                     height: 20,

@@ -24,14 +24,6 @@ class _FlashCardsState extends State<FlashCards> {
   String setName;
   Box<VocabSetModel> setBox;
   AudioPlayer audioPlayer = AudioPlayer();
-  String s1 = "",
-      s2 = "",
-      s3 = "",
-      s4 = "",
-      s5 = "",
-      s6 = "",
-      s7 = "",
-      synonym = "";
 
   @override
   void initState() {
@@ -201,12 +193,7 @@ class _FlashCardsState extends State<FlashCards> {
       if(setBox.getAt(i).learnt == true){
         //
       }
-      else if(setBox.getAt(i).word == currentFlashCard){
-        print("SAMEEEEEEE");
-      }
       else{
-        print("1 :" +setBox.getAt(i).word);
-        print("2 :" +currentFlashCard);
         values.add(i);
       }
     }
@@ -214,85 +201,100 @@ class _FlashCardsState extends State<FlashCards> {
       completed = true;
       return wordsAvailable ? Container(child: Text("Completed"),) : Container(child: Center(child: Text("Go to -> Browse words page -> add words")),);
     }
+    else if(values.length == 1){
+      Random random = new Random();
+      val = values[random.nextInt(values.length)];
+      currentFlashCard = setBox.getAt(val).word;
+      return buildFlipCardP2();
+    }
     else{
+      for(int i=0; i<values.length; i++){
+        if(currentFlashCard == setBox.getAt(i).word){
+         values.removeAt(i);
+        }
+      }
       Random random = new Random();
       // val = random.nextInt(values.length - 1);
       print(values);
       val = values[random.nextInt(values.length)];
       currentFlashCard = setBox.getAt(val).word;
-      return FlipCard(
-          fill: Fill
-              .fillBack, // Fill the back side of the card to make in the same size as the front.
-          direction: FlipDirection.HORIZONTAL, // default
-          front: Container(
-            width: double.infinity,
-            margin: EdgeInsets.all(10),
-            color: Color(0xffF5591F),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  setBox.getAt(val).word,
-                  style: TextStyle(
-                    fontSize: 100,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // audioPlayer.play(setBox.getAt(0).audioURL);
-                    play(setBox.getAt(val).audioURL);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.volume_up,
-                      size: 50,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          back: Container(
-            margin: EdgeInsets.all(10),
-            color: Color(0xffF5591F),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Meaning: ' + setBox.getAt(val).meaning,
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  '  Example: ' + setBox.getAt(val).example,
-                  style: TextStyle(fontSize: 22),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
-                setBox.getAt(val).synonym[0] != "No Synonyms Found"
-                    ? Text(
-                  'Synonym: ' +
-                      setBox.getAt(val).synonym[0] +
-                      " ," +
-                      setBox.getAt(val).synonym[1] +
-                      " ," +
-                      setBox.getAt(val).synonym[2] +
-                      " ," +
-                      setBox.getAt(val).synonym[3],
-                  style: TextStyle(fontSize: 20),
-                )
-                    : Text("")
-              ],
-            ),
-          ),
-        );
+      return buildFlipCardP2();
     }
   }
+
+   FlipCard buildFlipCardP2() {
+     return FlipCard(
+        fill: Fill
+            .fillBack, // Fill the back side of the card to make in the same size as the front.
+        direction: FlipDirection.HORIZONTAL, // default
+        front: Container(
+          width: double.infinity,
+          margin: EdgeInsets.all(10),
+          color: Color(0xffF5591F),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                setBox.getAt(val).word,
+                style: TextStyle(
+                  fontSize: 100,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // audioPlayer.play(setBox.getAt(0).audioURL);
+                  play(setBox.getAt(val).audioURL);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.volume_up,
+                    size: 50,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        back: Container(
+          margin: EdgeInsets.all(10),
+          color: Color(0xffF5591F),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Meaning: ' + setBox.getAt(val).meaning,
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                '  Example: ' + setBox.getAt(val).example,
+                style: TextStyle(fontSize: 22),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
+              setBox.getAt(val).synonym[0] != "No Synonyms Found"
+                  ? Text(
+                'Synonym: ' +
+                    setBox.getAt(val).synonym[0] +
+                    " ," +
+                    setBox.getAt(val).synonym[1] +
+                    " ," +
+                    setBox.getAt(val).synonym[2] +
+                    " ," +
+                    setBox.getAt(val).synonym[3],
+                style: TextStyle(fontSize: 20),
+              )
+                  : Text("")
+            ],
+          ),
+        ),
+      );
+   }
 }
 
