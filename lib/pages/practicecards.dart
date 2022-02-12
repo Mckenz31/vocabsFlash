@@ -1,111 +1,118 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vocabs_flash/models/vocabSet_model.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class PracticeCards extends StatefulWidget {
+  String boxName = Hive.box('vocabSets').getAt(0);
   @override
   _PracticeCardsState createState() => _PracticeCardsState();
 }
 
 class _PracticeCardsState extends State<PracticeCards> {
-
-  Timer _timer;
-  int _seconds = 60;
-  int _points = 0;
-
-  void beginTimer(){
-    const time = const Duration(seconds: 1);
-    _timer = new Timer.periodic(time, (Timer timer){
-      if(_seconds == 0){
-        setState(() {
-          _timer.cancel();
-        });
-      }
-      else{
-        setState(() {
-          _seconds--;
-          print(_seconds);
-        });
-      }
-    });
-  }
-
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
   @override
-  void initState() {
-    super.initState();
-    beginTimer();
+  Widget build(BuildContext context) {
+    // String boxName = Hive.box('vocabSets').getAt(0);
+    Box mainBox = Hive.box('vocabSets');
+    Box<VocabSetModel> listBox;
+    AudioPlayer audioPlayer = AudioPlayer();
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Lists'),
+      ),
+      drawer: mainBox.length > 0
+          ? Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    child: Text('Vocabulary Lists'),
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage("assets/img-4.jpg"),
+                        ),
+                    ),
+                  ),
+                  for (int i = 0; i < mainBox.length; i++)
+                    ListTile(
+                      title: Text('${mainBox.getAt(i)}'),
+                      onTap: () {
+                        setState(() {
+                          widget.boxName = Hive.box('vocabSets').getAt(i);
+                        });
+                      },
+                    ),
+                ],
+              ),
+            )
+          : Drawer(),
+      body: VocabLists(boxName: widget.boxName),
+    );
+  }
+}
+
+class VocabLists extends StatelessWidget {
+  VocabLists({
+    @required this.boxName,
+  });
+
+  final String boxName;
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  play(String url) async {
+    await audioPlayer.play("https://" + url);
+    print(url);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Title(color: Colors.deepOrangeAccent, child: Text('Practice')),),
-      body: Container(
-        color: Colors.orange,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Container(
-                //   // margin: EdgeInsets.all(10),
-                //   decoration: BoxDecoration(
-                //     color: Colors.black,
-                //     borderRadius: BorderRadius.circular(30)
-                //   ),
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(25.0),
-                //     child: Text('$_seconds'),
-                //   ),
-                // ),
-                Text("Timer: " +_seconds.toString(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black)),
-                Text("Points: " +_points.toString(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900, color: Colors.black)),
-              ],
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height/1.5,
-              width: MediaQuery.of(context).size.width,
-              // color: Colors.deepOrange,
-              child: Card(
-                color: Colors.orange,
-                child: Center(child: Text("hello", style: TextStyle(fontSize: 59, fontWeight: FontWeight.w900),)),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.black,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      child: Icon(Icons.clear),
-                      onPressed: (){
-
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                      ),
+    print(boxName);
+    return ValueListenableBuilder(
+      valueListenable: Hive.box<VocabSetModel>(boxName).listenable(),
+      builder: (context, Box box, widget) {
+        return ListView.builder(
+          itemCount: box.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              leading: Container(
+                padding: EdgeInsets.only(right: 12.0),
+                decoration: BoxDecoration(
+                    border: Border(
+                        right: BorderSide(width: 2.2, color: Colors.white30),
                     ),
-                    ElevatedButton(
-                      child: Icon(Icons.check),
-                      onPressed: (){
-                      
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                    ),
-                  ],
                 ),
+                child: Text(index.toString()),
               ),
-            ),
-          ],
-        ),
-      ),
+              title: Text(
+                '${box.getAt(index).word}',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Row(
+                children: <Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                        child: Text('${box.getAt(index).meaning}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                        ),),
+                      )),
+                ],
+              ),
+              trailing: Icon(Icons.volume_up, color: Colors.white, size: 30.0),
+              onTap: () {
+                play(box.getAt(index).audioURL);
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
