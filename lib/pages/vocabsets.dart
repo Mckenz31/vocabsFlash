@@ -24,16 +24,22 @@ class _VocabSetsState extends State<VocabSets> {
 
   @override
   Widget build(BuildContext context) {
+    bool mode = Hive.box('settings').get('darkMode');
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: mode ? Colors.black : Colors.white,
       appBar: AppBar(
         centerTitle: true,
+        backgroundColor: mode ? Colors.white12 : Colors.deepOrange,
         title: Title(
-            color: Colors.purple, child: Text("Vocabulary sets to learn")),
+            color: Colors.black,
+            child: Text("Vocabulary sets to learn")),
         actions: [
           Padding(
             padding: EdgeInsets.all(10),
             child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: mode ? MaterialStateProperty.all<Color>(Colors.deepOrange) : MaterialStateProperty.all<Color>(Colors.blue[900]),
+              ),
               child: Icon(Icons.add),
               onPressed: () {
                 showModalBottomSheet(
@@ -69,7 +75,8 @@ class _VocabSetsState extends State<VocabSets> {
                                   decoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.white, width: 5.0),
+                                          color: mode ? Colors.white : Colors.black,
+                                          width: 5.0),
                                     ),
                                     labelText: 'Vocab set name',
                                   ),
@@ -174,28 +181,30 @@ class _VocabSetsState extends State<VocabSets> {
                         });
                       },
                       child: Card(
-                        shadowColor: Colors.white12,
+                        shadowColor: mode ? Colors.white12 : Colors.deepOrange,
                         elevation: 10,
-                        color: Colors.white24,
+                        color: mode ? Colors.white24 : Colors.deepOrange,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
                               '${setsBox.getAt(index)}',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                             indivBox.length > 0
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text("Learnt: $learnt"),
-                                      Text("In progress: $inProgress"),
-                                      Text("Unknown: $unFamiliar"),
+                                      Text("Learnt: $learnt", style: TextStyle(color: Colors.white),),
+                                      Text("In progress: $inProgress", style: TextStyle(color: Colors.white),),
+                                      Text("Unknown: $unFamiliar", style: TextStyle(color: Colors.white),),
                                     ],
                                   )
-                                : Text("No Flash Cards Created Yet"),
+                                : Text("No Flash Cards Created Yet", style: TextStyle(color: Colors.white),),
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 18.0, right: 18.0),
@@ -203,6 +212,8 @@ class _VocabSetsState extends State<VocabSets> {
                                 semanticsLabel: "Linear progress indicator",
                                 minHeight: 20,
                                 value: value,
+                                backgroundColor: Colors.white,
+                                color: mode ? Colors.deepOrange : Colors.blue[900],
                               ),
                             ),
                           ],

@@ -5,12 +5,14 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            height: 250,
+            padding: EdgeInsets.only(top: 20),
+            height: MediaQuery.of(context).size.height / 2.7,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
+              // borderRadius: BorderRadius.only(bottomLeft: Radius.circular(90)),
               color: Color(0xffF5591F),
               gradient: LinearGradient(
                   colors: [(new Color(0xffF5591F)), (new Color(0xffF2861E))],
@@ -24,11 +26,13 @@ class LandingPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-
-                    IconButton(onPressed: (){
-                      Navigator.pushNamed(context,'/search');
-                    }, icon: Icon(Icons.info_outline),
-                      color: Colors.white,),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/settings');
+                      },
+                      icon: Icon(Icons.settings),
+                      color: Colors.white,
+                    ),
                   ],
                 ),
                 Container(
@@ -40,83 +44,90 @@ class LandingPage extends StatelessWidget {
                         color: Colors.white),
                   ),
                 ),
-                SizedBox()
+                SizedBox(height: 20,)
               ],
             ),
           ),
-          SizedBox(
-            height: 100,
-          ),
-          FlatButton(
-            padding: EdgeInsets.symmetric(
-              horizontal: 50.0,
-              vertical: 10.0,
-            ),
-            splashColor: Color(0xffF5341F),
-
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-            onPressed: (){
-              Navigator.pushNamed(context, '/vocabSets');
-            },
-            color: Color(0xffF5591F),
-            textColor: Colors.white,
-            child: Text(
-              "FLASHCARDS",
-              style: TextStyle(
-                fontSize: 30.0,
-                fontFamily: "Times New Roman",
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 30),
-            child: FlatButton(
-
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-              onPressed: (){
-                Navigator.pushNamed(context,'/practiceCards');
-
-              },
-              padding: EdgeInsets.symmetric(
-                horizontal: 100.0,
-                vertical: 10.0,
-              ),
-              color: Color(0xffF5591F),
-              textColor: Colors.white,
-              child: Text(
-                "PRACTICE",
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontFamily: "Times New Roman",
-                  fontWeight: FontWeight.w400,
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height/10,
+                  width: MediaQuery.of(context).size.width/1.2,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF5591F),
+                      border: Border.all(
+                        color: Color(0xffF5591F),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  child: TextButton(
+                    child: Text(
+                      "FlashCards",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontFamily: "Times New Roman",
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/vocabSets');
+                    },
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 100),
-            child: FlatButton.icon(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              onPressed: () {
-                Navigator.pushNamed(context, '/search');
-              },
-              padding: EdgeInsets.symmetric(
-                horizontal: 80.0,
-                vertical: 20.0,
-              ),
-              color: Color(0xffF5591F),
-              textColor: Colors.white,
-              icon: Icon(Icons.search, color: Colors.white),
-              label: Text(
-                "BROWSE SEARCH",
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontFamily: "Times New Roman",
-                  fontWeight: FontWeight.w400,
+                Container(
+                  height: MediaQuery.of(context).size.height/10,
+                  width: MediaQuery.of(context).size.width/1.2,
+                  decoration: BoxDecoration(
+                      color: Color(0xffF5591F),
+                      border: Border.all(
+                        color: Color(0xffF5591F),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  child: TextButton(
+                    child: Text(
+                      "Practice sets",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontFamily: "Times New Roman",
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/practiceCards');
+                    },
+                  ),
                 ),
-              ),
+                Container(
+                  height: MediaQuery.of(context).size.height/10,
+                  width: MediaQuery.of(context).size.width/1.2,
+                  decoration: BoxDecoration(
+                      color: Color(0xffF5591F),
+                      border: Border.all(
+                        color: Color(0xffF5591F),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  child: TextButton(
+                    child: Text(
+                      "Browse words",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25.0,
+                        fontFamily: "Times New Roman",
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/search');
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
