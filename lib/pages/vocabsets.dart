@@ -24,7 +24,7 @@ class _VocabSetsState extends State<VocabSets> {
 
   @override
   Widget build(BuildContext context) {
-    bool mode = Hive.box('settings').get('darkMode');
+    bool mode = Hive.box('settings').get('darkMode', defaultValue: false);
     return Scaffold(
       backgroundColor: mode ? Colors.black : Colors.white,
       appBar: AppBar(
@@ -117,7 +117,7 @@ class _VocabSetsState extends State<VocabSets> {
                                 }
                               },
                               child: Text(
-                                'Submit',
+                                'Create',
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -125,7 +125,7 @@ class _VocabSetsState extends State<VocabSets> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Colors.blue),
+                                        Colors.deepOrange),
                               ),
                             ),
                             SizedBox(height: 10,)

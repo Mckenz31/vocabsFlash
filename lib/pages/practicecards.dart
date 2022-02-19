@@ -55,6 +55,7 @@ class _PracticeCardsState extends State<PracticeCards> {
 }
 
 class VocabLists extends StatelessWidget {
+  bool mode = Hive.box('settings').get('darkMode', defaultValue: false);
   VocabLists({
     @required this.boxName,
   });
@@ -83,7 +84,7 @@ class VocabLists extends StatelessWidget {
                 padding: EdgeInsets.only(right: 12.0),
                 decoration: BoxDecoration(
                     border: Border(
-                        right: BorderSide(width: 2.2, color: Colors.white30),
+                        right: BorderSide(width: 2.2, color: mode ? Colors.white30 : Colors.black),
                     ),
                 ),
                 child: Text(index.toString()),
@@ -91,7 +92,7 @@ class VocabLists extends StatelessWidget {
               title: Text(
                 '${box.getAt(index).word}',
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    TextStyle(color: mode ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
               ),
               subtitle: Row(
                 children: <Widget>[
@@ -105,7 +106,7 @@ class VocabLists extends StatelessWidget {
                       )),
                 ],
               ),
-              trailing: Icon(Icons.volume_up, color: Colors.white, size: 30.0),
+              trailing: Icon(Icons.volume_up, color: mode ? Colors.white : Colors.black, size: 30.0),
               onTap: () {
                 play(box.getAt(index).audioURL);
               },

@@ -225,7 +225,7 @@ class _FlashCardsState extends State<FlashCards> {
    FlipCard buildFlipCardP2() {
      return FlipCard(
         fill: Fill
-            .fillBack, // Fill the back side of the card to make in the same size as the front.
+            .fillBack, //
         direction: FlipDirection.HORIZONTAL, // default
         front: Container(
           width: double.infinity,
@@ -237,7 +237,7 @@ class _FlashCardsState extends State<FlashCards> {
               Text(
                 setBox.getAt(val).word,
                 style: TextStyle(
-                  fontSize: 100,
+                  fontSize: 40,
                 ),
               ),
               GestureDetector(
