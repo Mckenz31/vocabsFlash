@@ -64,7 +64,7 @@ class VocabLists extends StatelessWidget {
   AudioPlayer audioPlayer = AudioPlayer();
 
   play(String url) async {
-    await audioPlayer.play("https://" + url);
+    await audioPlayer.play(url);
     print(url);
   }
 

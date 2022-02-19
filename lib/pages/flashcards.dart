@@ -49,7 +49,7 @@ class _FlashCardsState extends State<FlashCards> {
   }
 
   play(String url) async {
-    await audioPlayer.play("https://" +url);
+    await audioPlayer.play(url);
     print(url);
   }
 
