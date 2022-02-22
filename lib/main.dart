@@ -67,9 +67,9 @@ class _MyAppState extends State<MyApp> {
                 '/practiceCards': (context) => PracticeCards(),
                 '/settings' : (context) => Settings()
               },
-              initialRoute: kDebugMode
-                  ? const String.fromEnvironment('START_PATH', defaultValue: '/')
-                  : '/',
+              initialRoute: Hive.box('settings').get('firstTime') != false
+                ? '/introductionPage'
+                : '/landingPage',
             );
           },
         );

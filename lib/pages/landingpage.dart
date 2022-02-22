@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class LandingPage extends StatelessWidget {
+class LandingPage extends StatefulWidget {
+  @override
+  State<LandingPage> createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +104,36 @@ class LandingPage extends StatelessWidget {
                       ),
                     ),
                     onPressed: (){
-                      Navigator.pushNamed(context, '/practiceCards');
+                      setState(() {
+                        if(Hive.box('vocabSets').length == 0){
+                          showDialog<void>(
+                            context: context,
+                            // barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Center(child: const Text('Sets not created')),
+                                content: SingleChildScrollView(
+                                  child: Center(child: Text('Go to FlashCards and create a vocabulary set')),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Okay',),
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.deepOrange,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                        else{
+                          Navigator.pushNamed(context, '/practiceCards');
+                        }
+                      });
                     },
                   ),
                 ),

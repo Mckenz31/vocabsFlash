@@ -1,5 +1,6 @@
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class IntroductionPage extends StatelessWidget {
   @override
@@ -35,7 +36,8 @@ class IntroductionPage extends StatelessWidget {
                 ),
               ],
               done: Text("Done", style: TextStyle(fontWeight: FontWeight.w600)),
-              onDone: () {
+              onDone: () async{
+                await Hive.box('settings').put('firstTime', false);
                 Navigator.pushNamed(context, '/landingPage');
               },
               showNextButton: false,
