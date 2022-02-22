@@ -14,7 +14,9 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Settings'),
+        backgroundColor: Colors.deepOrange,
       ),
       body: ListView(
         children: [

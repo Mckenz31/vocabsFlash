@@ -71,7 +71,7 @@ class _SearchState extends State<Search> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('Search')),
+        appBar: AppBar(title: Text('Search'), backgroundColor: Colors.deepOrange,),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Container(
