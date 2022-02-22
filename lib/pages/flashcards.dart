@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:vocabs_flash/models/vocabSet_model.dart';
 import 'package:hive/hive.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class FlashCards extends StatefulWidget {
   final int cardNo;
@@ -23,11 +23,42 @@ class _FlashCardsState extends State<FlashCards> {
   int val;
   String setName;
   Box<VocabSetModel> setBox;
-  AudioPlayer audioPlayer = AudioPlayer();
+  FlutterTts _flutterTTs = FlutterTts();
+  bool isPlaying = false;
+
+  void initializeTts(){
+    _flutterTTs.setStartHandler(() {
+      // setState(() {
+        isPlaying = true;
+      // });
+    });
+    _flutterTTs.setCompletionHandler(() {
+      // setState(() {
+        isPlaying = false;
+      // });
+    });
+    _flutterTTs.setErrorHandler((message) {
+      // setState(() {
+        isPlaying = false;
+      // });
+    });
+  }
+
+  void speech(String word) async {
+    await _flutterTTs.speak(word);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _flutterTTs.stop();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
+    initializeTts();
     print(widget.cardNo);
     setName = Hive.box('vocabSets').getAt(widget.cardNo);
     print(setName);
@@ -46,11 +77,6 @@ class _FlashCardsState extends State<FlashCards> {
     }
     if(valCheck.length == 0)
       completed = true;
-  }
-
-  play(String url) async {
-    await audioPlayer.play(url);
-    print(url);
   }
 
   @override
@@ -190,33 +216,53 @@ class _FlashCardsState extends State<FlashCards> {
    buildFlipCard() {
     values.clear();
     for(int i=0; i<setBox.length; i++){
+      //To not repeat the words that the user got right
       if(setBox.getAt(i).learnt == true){
         //
       }
+      //Add the words which are not learnt
       else{
         values.add(i);
       }
     }
+    //If no cards left
     if(values.length == 0){
       completed = true;
+      print("Ran1");
       return wordsAvailable ? Container(child: Text("Completed"),) : Container(child: Center(child: Text("Go to -> Browse words page -> add words")),);
     }
+
+    //If only a single card is left
     else if(values.length == 1){
       Random random = new Random();
       val = values[random.nextInt(values.length)];
       currentFlashCard = setBox.getAt(val).word;
+      print("Ran");
       return buildFlipCardP2();
     }
+
+    //If many cards are there
     else{
       for(int i=0; i<values.length; i++){
         if(currentFlashCard == setBox.getAt(i).word){
+          print("Now0: "+setBox.getAt(i).word +", Before0: "+currentFlashCard);
+          print(values[i]);
          values.removeAt(i);
         }
       }
       Random random = new Random();
       // val = random.nextInt(values.length - 1);
-      print(values);
+      print("Valuesssssss" +values.toString());
       val = values[random.nextInt(values.length)];
+      print("Now: "+setBox.getAt(val).word +", Before: "+currentFlashCard);
+
+      //Checking if the card is a repeat and making sure we do not use a card which is repeated
+      if(currentFlashCard == setBox.getAt(val).word){
+        int value = val;
+        while(val == value){
+          val = values[random.nextInt(values.length)];
+        }
+      }
       currentFlashCard = setBox.getAt(val).word;
       return buildFlipCardP2();
     }
@@ -242,8 +288,7 @@ class _FlashCardsState extends State<FlashCards> {
               ),
               GestureDetector(
                 onTap: () {
-                  // audioPlayer.play(setBox.getAt(0).audioURL);
-                  play(setBox.getAt(val).audioURL);
+                  speech(setBox.getAt(val).word);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -270,10 +315,11 @@ class _FlashCardsState extends State<FlashCards> {
               SizedBox(
                 height: 20,
               ),
-              Text(
+              setBox.getAt(val).example != "No Example Found"
+              ? Text(
                 '  Example: ' + setBox.getAt(val).example,
                 style: TextStyle(fontSize: 22),
-              ),
+              ) : Text(""),
               SizedBox(
                 height: 20,
               ),
@@ -285,9 +331,9 @@ class _FlashCardsState extends State<FlashCards> {
                     " ," +
                     setBox.getAt(val).synonym[1] +
                     " ," +
-                    setBox.getAt(val).synonym[2] +
-                    " ," +
-                    setBox.getAt(val).synonym[3],
+                    setBox.getAt(val).synonym[2],
+                    // " ," +
+                    // setBox.getAt(val).synonym[3],
                 style: TextStyle(fontSize: 20),
               )
                   : Text("")
