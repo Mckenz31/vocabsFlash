@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vocabs_flash/models/vocabSet_model.dart';
-import 'package:vocabs_flash/pages/settings.dart';
-import 'package:vocabs_flash/pages/vocabsets.dart';
+import 'package:flacabulary/models/vocabSet_model.dart';
+import 'package:flacabulary/pages/settings.dart';
+import 'package:flacabulary/pages/vocabsets.dart';
 import 'pages/intoductionpage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vocabs_flash/pages/practicecards.dart';
+import 'package:flacabulary/pages/practicecards.dart';
 import 'pages/landingpage.dart';
 import 'pages/search.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                 '/settings' : (context) => Settings()
               },
               initialRoute: Hive.box('settings').get('firstTime') != false
-                ? '/introductionPage'
+                ? '/'
                 : '/landingPage',
             );
           },

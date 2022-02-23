@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:vocabs_flash/models/vocabSet_model.dart';
-import 'package:vocabs_flash/result.dart';
+import 'package:flacabulary/models/vocabSet_model.dart';
+import 'package:flacabulary/result.dart';
 import 'package:hive/hive.dart';
 
 class Search extends StatefulWidget {
@@ -71,7 +71,7 @@ class _SearchState extends State<Search> {
     return Container(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('Search'), backgroundColor: Colors.deepOrange,),
+        appBar: AppBar(title: Text('Search'), backgroundColor: Colors.deepOrange, centerTitle: true,),
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: Container(

@@ -1,4 +1,4 @@
-package mckenzie.vocabs_flash
+package mckenzie.flacabulary
 
 import io.flutter.embedding.android.FlutterActivity
 

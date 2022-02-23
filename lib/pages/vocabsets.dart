@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'flashcards.dart';
-import 'package:vocabs_flash/models/vocabSet_model.dart';
+import 'package:flacabulary/models/vocabSet_model.dart';
 import 'package:provider/provider.dart';
-import 'package:vocabs_flash/providers/hivenewset_provider.dart';
+import 'package:flacabulary/providers/hivenewset_provider.dart';
 import 'dart:async';
 
 class VocabSets extends StatefulWidget {

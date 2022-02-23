@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mckenzie.vocabs_flash">
+    package="mckenzie.flacabulary">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="vocabs_flash"
+        android:label="flacabulary"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

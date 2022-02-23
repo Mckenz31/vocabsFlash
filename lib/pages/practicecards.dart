@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:vocabs_flash/models/vocabSet_model.dart';
+import 'package:flacabulary/models/vocabSet_model.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class PracticeCards extends StatefulWidget {

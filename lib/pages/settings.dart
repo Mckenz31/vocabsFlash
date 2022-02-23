@@ -45,7 +45,7 @@ class _SettingsState extends State<Settings> {
                   onPressed: () {
                     showAboutDialog(
                         context: context,
-                        applicationName: "vocabs_flash",
+                        applicationName: "flacabulary",
                         applicationLegalese:
                         "Fun and effective way to learn vocabulary\n\n\n");
                   },

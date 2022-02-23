@@ -43,9 +43,9 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 Container(
                   child: Text(
-                    "Flashcards",
+                    "Flacabulary",
                     style: TextStyle(
-                        fontSize: 50.0,
+                        fontSize: MediaQuery.of(context).size.width/8,
                         fontFamily: "Times New Roman",
                         color: Colors.white),
                   ),
@@ -95,7 +95,7 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   child: TextButton(
                     child: Text(
-                      "Practice sets",
+                      "Vocabulary list",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 25.0,

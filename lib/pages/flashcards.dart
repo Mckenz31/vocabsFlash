@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
-import 'package:vocabs_flash/models/vocabSet_model.dart';
+import 'package:flacabulary/models/vocabSet_model.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -84,6 +84,8 @@ class _FlashCardsState extends State<FlashCards> {
     print(widget.cardNo);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
+        centerTitle: true,
         title: Title(
           child: Text(setName),
           color: Colors.red,
@@ -171,17 +173,17 @@ class _FlashCardsState extends State<FlashCards> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    child: Text('Yes, got it'),
+                    child: Text('Not at all'),
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.green[500])),
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red)),
                     onPressed: () {
                       setState(() {
-                        setBox.putAt(val, VocabSetModel(learnt: true, inProcess: false, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                        buildColumn();
+                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
                       });
                     },
                   ),
+
                   ElevatedButton(
                     child: Text('Almost there'),
                     style: ButtonStyle(
@@ -195,13 +197,14 @@ class _FlashCardsState extends State<FlashCards> {
                     },
                   ),
                   ElevatedButton(
-                    child: Text('Not at all'),
+                    child: Text('Yes, got it'),
                     style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red)),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Colors.green[500])),
                     onPressed: () {
                       setState(() {
-                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                        setBox.putAt(val, VocabSetModel(learnt: true, inProcess: false, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                        buildColumn();
                       });
                     },
                   ),
@@ -278,25 +281,38 @@ class _FlashCardsState extends State<FlashCards> {
           margin: EdgeInsets.all(10),
           color: Color(0xffF5591F),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                setBox.getAt(val).word,
-                style: TextStyle(
-                  fontSize: 40,
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  speech(setBox.getAt(val).word);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.volume_up,
-                    size: 50,
+              Expanded(
+                child: Center(
+                  child: Text(
+                    setBox.getAt(val).word,
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
                   ),
                 ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    speech(setBox.getAt(val).word);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.volume_up,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text("Flip"),
+                  Icon(Icons.next_plan),
+                ],
               ),
             ],
           ),
