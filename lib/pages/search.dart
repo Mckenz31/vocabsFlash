@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -52,6 +53,7 @@ class _SearchState extends State<Search> {
       print(result.antonyms);
       isLoading = false;
     } on NoSuchMethodError catch(e){
+      print(e);
       NoSuchMethdError = true;
     }
   }
@@ -64,6 +66,38 @@ class _SearchState extends State<Search> {
     for (int i = 0; i < sets.length; i++) {
       dropDownItems.add(sets.getAt(i));
     }
+  }
+
+  void errorMessg(){
+    print("Excecuting--------------------------");
+    Timer(Duration(seconds: 2), (){
+      if(NoSuchMethdError){
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("The word you have entered does not exist"),
+          );
+        });
+        NoSuchMethdError = false;
+      }
+    });Timer(Duration(seconds: 7), (){
+      if(NoSuchMethdError){
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("The word you have entered does not exist"),
+          );
+        });
+        NoSuchMethdError = false;
+      }
+    });Timer(Duration(seconds: 14), (){
+      if(NoSuchMethdError){
+        showDialog(context: context, builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("The word you have entered does not exist"),
+          );
+        });
+        NoSuchMethdError = false;
+      }
+    });
   }
 
   @override
@@ -101,7 +135,7 @@ class _SearchState extends State<Search> {
                 SizedBox(
                   height: 20,
                 ),
-                searchEntered
+                result != null
                     ? Text('Word : ' + _searchController.text,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 20))
@@ -179,11 +213,13 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Widget buildCircularProgressIndicator() {
+  buildCircularProgressIndicator() {
     if(NoSuchMethdError){
+      NoSuchMethdError = false;
       return Text("An Error has occurred");
     }
     else if(isLoading){
+      errorMessg();
       return Expanded(
             child: Container(
               child: Center(
@@ -197,17 +233,6 @@ class _SearchState extends State<Search> {
     else {
       return Text("");
     }
-    // return isLoading
-    //     ? Expanded(
-    //   child: Container(
-    //     child: Center(
-    //       child: CircularProgressIndicator(
-    //         color: Colors.deepOrange,
-    //       ),
-    //     ),
-    //   ),
-    // )
-    //     : Text("");
   }
 }
 

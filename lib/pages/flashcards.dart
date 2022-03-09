@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:flip_card/flip_card_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flacabulary/models/vocabSet_model.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'dart:async';
 
 class FlashCards extends StatefulWidget {
   final int cardNo;
@@ -25,22 +28,19 @@ class _FlashCardsState extends State<FlashCards> {
   Box<VocabSetModel> setBox;
   FlutterTts _flutterTTs = FlutterTts();
   bool isPlaying = false;
+  FlipCardController _controller;
+  bool toFlip = false;
+  bool cardChange = false;
 
   void initializeTts(){
     _flutterTTs.setStartHandler(() {
-      // setState(() {
         isPlaying = true;
-      // });
     });
     _flutterTTs.setCompletionHandler(() {
-      // setState(() {
         isPlaying = false;
-      // });
     });
     _flutterTTs.setErrorHandler((message) {
-      // setState(() {
         isPlaying = false;
-      // });
     });
   }
 
@@ -58,6 +58,7 @@ class _FlashCardsState extends State<FlashCards> {
   @override
   void initState() {
     super.initState();
+    _controller = FlipCardController();
     initializeTts();
     print(widget.cardNo);
     setName = Hive.box('vocabSets').getAt(widget.cardNo);
@@ -77,6 +78,14 @@ class _FlashCardsState extends State<FlashCards> {
     }
     if(valCheck.length == 0)
       completed = true;
+  }
+
+  void doStuff() {
+    if(toFlip == true){
+      toFlip = false;
+      print("Flip" +toFlip.toString());
+      _controller.toggleCard();
+    }
   }
 
   @override
@@ -178,8 +187,12 @@ class _FlashCardsState extends State<FlashCards> {
                         backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.red)),
                     onPressed: () {
-                      setState(() {
-                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                      doStuff();
+                      Timer(Duration(milliseconds: 500), () {
+                        setState(() {
+                          setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                          // buildColumn();
+                        });
                       });
                     },
                   ),
@@ -190,9 +203,12 @@ class _FlashCardsState extends State<FlashCards> {
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Colors.orange)),
                     onPressed: () {
-                      setState(() {
-                        setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                        // buildColumn();
+                      doStuff();
+                      Timer(Duration(milliseconds: 500), () {
+                        setState(() {
+                          setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
+                          // buildColumn();
+                        });
                       });
                     },
                   ),
@@ -273,8 +289,12 @@ class _FlashCardsState extends State<FlashCards> {
 
    FlipCard buildFlipCardP2() {
      return FlipCard(
-        fill: Fill
-            .fillBack, //
+       controller: _controller,
+        fill: Fill.fillBack,
+        onFlipDone: (status) {
+          toFlip = status;
+          print("Status" +status.toString());
+        },
         direction: FlipDirection.HORIZONTAL, // default
         front: Container(
           width: double.infinity,

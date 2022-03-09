@@ -27,18 +27,10 @@ class Result extends StatelessWidget {
           Expanded(child: Text(result.meanings, style: TextStyle(fontSize: 16)))
         ]),
         SizedBox(height: 40),
-        result.antonyms[0] != "No Antonyms Found" ?
+        result.antonyms[0] != "No Antonyms Found"?
           Row(children: [
             Text('Antonyms : ',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            // Column(children: [
-            //   ...(result.antonyms)
-            //       .map((e) => Padding(
-            //             padding: EdgeInsets.all(4),
-            //             child: Text(e, style: TextStyle(fontSize: 16)),
-            //           ))
-            //       .toList()
-              // ])
               Flexible(
                 child: Text(synonyms, style: TextStyle(fontSize: 16)
                 ),
@@ -50,15 +42,6 @@ class Result extends StatelessWidget {
             ?Row(children: [
               Text('Synonyms : ',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-              // SizedBox(width: 40,),
-              // Column(children: [
-              //   ...(result.synonyms)
-              //       .map((e) => Padding(
-              //     padding: EdgeInsets.all(4),
-              //     child: Text(e, style: TextStyle(fontSize: 16)),
-              //   ))
-              //       .toList(),
-              // ]),
               Flexible(
                 child: Text(synonyms, style: TextStyle(fontSize: 16)
                 ),
