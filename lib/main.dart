@@ -13,6 +13,7 @@ import 'models/vocabSet_model.dart';
 import 'providers/hivenewset_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flacabulary/models/flashCardChange.dart';
 
 
 void main() async {
@@ -22,9 +23,12 @@ void main() async {
   Hive.registerAdapter(VocabSetModelAdapter());
   await Hive.openBox('settings');
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => HiveNewSet(),
-      child: MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: flashCardChange(),),
+        ChangeNotifierProvider.value(value: HiveNewSet(),)
+      ],
+        child: MyApp(),
     ),
   );
 }

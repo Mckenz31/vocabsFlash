@@ -6,7 +6,8 @@ import 'package:flip_card/flip_card.dart';
 import 'package:flacabulary/models/vocabSet_model.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'dart:async';
+import 'package:provider/provider.dart';
+import 'package:flacabulary/models/flashCardChange.dart';
 
 class FlashCards extends StatefulWidget {
   final int cardNo;
@@ -32,15 +33,15 @@ class _FlashCardsState extends State<FlashCards> {
   bool toFlip = false;
   bool cardChange = false;
 
-  void initializeTts(){
+  void initializeTts() {
     _flutterTTs.setStartHandler(() {
-        isPlaying = true;
+      isPlaying = true;
     });
     _flutterTTs.setCompletionHandler(() {
-        isPlaying = false;
+      isPlaying = false;
     });
     _flutterTTs.setErrorHandler((message) {
-        isPlaying = false;
+      isPlaying = false;
     });
   }
 
@@ -65,25 +66,27 @@ class _FlashCardsState extends State<FlashCards> {
     print(setName);
     Hive.openBox<VocabSetModel>(setName);
     setBox = Hive.box<VocabSetModel>(setName);
-    if(setBox.length > 0){
+    if (setBox.length > 0) {
       wordsAvailable = true;
     }
-    for(int i=0; i<setBox.length; i++){
-      if(setBox.getAt(i).learnt == true){
+    for (int i = 0; i < setBox.length; i++) {
+      if (setBox.getAt(i).learnt == true) {
         //
-      }
-      else{
+      } else {
         valCheck.add(i);
       }
     }
-    if(valCheck.length == 0)
-      completed = true;
+    if (valCheck.length == 0) completed = true;
+  }
+
+  Color updateCardColor(){
+    Provider.of<flashCardChange>(context, listen: false).changeColor();
   }
 
   void doStuff() {
-    if(toFlip == true){
+    if (toFlip == true) {
       toFlip = false;
-      print("Flip" +toFlip.toString());
+      print("Flip" + toFlip.toString());
       _controller.toggleCard();
     }
   }
@@ -103,16 +106,27 @@ class _FlashCardsState extends State<FlashCards> {
           Padding(
             padding: const EdgeInsets.only(right: 15),
             child: PopupMenuButton(
-              child: Icon(Icons.menu),
+              child: Icon(Icons.more_vert),
               // color: Colors.green,
               itemBuilder: (context) => [
                 PopupMenuItem<int>(
                   value: 0,
                   child: Text("Start learning again"),
-                  onTap: (){
+                  onTap: () {
                     setState(() {
-                      for(int i = 0; i<setBox.length; i++){
-                        setBox.putAt(i, VocabSetModel(learnt: false, inProcess: false, inComplete: true, meaning: setBox.getAt(i).meaning, example: setBox.getAt(i).example, word: setBox.getAt(i).word, audioURL: setBox.getAt(i).audioURL, synonym: setBox.getAt(i).synonym, antonym: setBox.getAt(i).antonym));
+                      for (int i = 0; i < setBox.length; i++) {
+                        setBox.putAt(
+                            i,
+                            VocabSetModel(
+                                learnt: false,
+                                inProcess: false,
+                                inComplete: true,
+                                meaning: setBox.getAt(i).meaning,
+                                example: setBox.getAt(i).example,
+                                word: setBox.getAt(i).word,
+                                audioURL: setBox.getAt(i).audioURL,
+                                synonym: setBox.getAt(i).synonym,
+                                antonym: setBox.getAt(i).antonym));
                         completed = false;
                         buildColumn();
                       }
@@ -122,7 +136,7 @@ class _FlashCardsState extends State<FlashCards> {
                 PopupMenuItem<int>(
                   value: 1,
                   child: Text("Delete word"),
-                  onTap: (){
+                  onTap: () {
                     setState(() {
                       setBox.deleteAt(val);
                     });
@@ -131,7 +145,7 @@ class _FlashCardsState extends State<FlashCards> {
                 PopupMenuItem<int>(
                   value: 2,
                   child: Text("Delete entire set"),
-                  onTap: (){
+                  onTap: () {
                     setState(() {
                       setBox.clear();
                       Hive.box('vocabSets').deleteAt(widget.cardNo);
@@ -162,97 +176,140 @@ class _FlashCardsState extends State<FlashCards> {
         SizedBox(
           height: 10,
         ),
-        completed ?
-          Container() :
-          Flexible(
-            flex: 1,
-            child: Container(
-              child: Text('Familiar with the term?'),
-            ),
-          ),
+        completed
+            ? Container()
+            : Flexible(
+                flex: 1,
+                child: Container(
+                  child: Text('Familiar with the term?'),
+                ),
+              ),
         SizedBox(
           height: 10,
         ),
-        completed ?
-          Container() :
-          Flexible(
-            flex: 2,
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    child: Text('Not at all'),
-                    style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red)),
-                    onPressed: () {
-                      doStuff();
-                      Timer(Duration(milliseconds: 500), () {
-                        setState(() {
-                          setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                          // buildColumn();
-                        });
-                      });
-                    },
-                  ),
+        completed
+            ? Container()
+            : Flexible(
+                flex: 2,
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        child: Text('Not at all'),
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red)),
+                        onPressed: () {
+                          doStuff();
+                          Timer(Duration(milliseconds: 500), () {
+                            setState(() {
+                              setBox.putAt(
+                                  val,
+                                  VocabSetModel(
+                                      learnt: false,
+                                      inProcess: true,
+                                      inComplete: false,
+                                      meaning: setBox.getAt(val).meaning,
+                                      example: setBox.getAt(val).example,
+                                      word: setBox.getAt(val).word,
+                                      audioURL: setBox.getAt(val).audioURL,
+                                      synonym: setBox.getAt(val).synonym,
+                                      antonym: setBox.getAt(val).antonym));
+                              // buildColumn();
+                            });
+                          });
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('Almost there'),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.orange)),
+                        onPressed: () {
+                          doStuff();
+                          Timer(Duration(milliseconds: 500), () {
+                            setState(() {
+                              setBox.putAt(
+                                  val,
+                                  VocabSetModel(
+                                      learnt: false,
+                                      inProcess: true,
+                                      inComplete: false,
+                                      meaning: setBox.getAt(val).meaning,
+                                      example: setBox.getAt(val).example,
+                                      word: setBox.getAt(val).word,
+                                      audioURL: setBox.getAt(val).audioURL,
+                                      synonym: setBox.getAt(val).synonym,
+                                      antonym: setBox.getAt(val).antonym));
+                              // buildColumn();
+                            });
+                          });
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('Yes, got it'),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.green[500])),
 
-                  ElevatedButton(
-                    child: Text('Almost there'),
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.orange)),
-                    onPressed: () {
-                      doStuff();
-                      Timer(Duration(milliseconds: 500), () {
-                        setState(() {
-                          setBox.putAt(val, VocabSetModel(learnt: false, inProcess: true, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                          // buildColumn();
-                        });
-                      });
-                    },
+                        onPressed: () {
+                          doStuff();
+                          Timer(Duration(milliseconds: 500), () {
+                            setState(() {
+                              setBox.putAt(
+                                  val,
+                                  VocabSetModel(
+                                      learnt: true,
+                                      inProcess: false,
+                                      inComplete: false,
+                                      meaning: setBox.getAt(val).meaning,
+                                      example: setBox.getAt(val).example,
+                                      word: setBox.getAt(val).word,
+                                      audioURL: setBox.getAt(val).audioURL,
+                                      synonym: setBox.getAt(val).synonym,
+                                      antonym: setBox.getAt(val).antonym));
+                              buildColumn();
+                            });
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    child: Text('Yes, got it'),
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.green[500])),
-                    onPressed: () {
-                      setState(() {
-                        setBox.putAt(val, VocabSetModel(learnt: true, inProcess: false, inComplete: false, meaning: setBox.getAt(val).meaning, example: setBox.getAt(val).example, word: setBox.getAt(val).word, audioURL: setBox.getAt(val).audioURL, synonym: setBox.getAt(val).synonym, antonym: setBox.getAt(val).antonym));
-                        buildColumn();
-                      });
-                    },
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
       ],
     );
   }
 
-   buildFlipCard() {
+  buildFlipCard() {
     values.clear();
-    for(int i=0; i<setBox.length; i++){
+    for (int i = 0; i < setBox.length; i++) {
       //To not repeat the words that the user got right
-      if(setBox.getAt(i).learnt == true){
+      if (setBox.getAt(i).learnt == true) {
         //
       }
       //Add the words which are not learnt
-      else{
+      else {
         values.add(i);
       }
     }
     //If no cards left
-    if(values.length == 0){
+    if (values.length == 0) {
       completed = true;
       print("Ran1");
-      return wordsAvailable ? Container(child: Text("Completed"),) : Container(child: Center(child: Text("Go to -> Browse words page -> add words")),);
+      return wordsAvailable
+          ? Container(
+              child: Text("Completed"),
+            )
+          : Container(
+              child: Center(
+                  child: Text("Go to -> Browse words page -> add words")),
+            );
     }
 
     //If only a single card is left
-    else if(values.length == 1){
+    else if (values.length == 1) {
       Random random = new Random();
       val = values[random.nextInt(values.length)];
       currentFlashCard = setBox.getAt(val).word;
@@ -261,24 +318,27 @@ class _FlashCardsState extends State<FlashCards> {
     }
 
     //If many cards are there
-    else{
-      for(int i=0; i<values.length; i++){
-        if(currentFlashCard == setBox.getAt(i).word){
-          print("Now0: "+setBox.getAt(i).word +", Before0: "+currentFlashCard);
+    else {
+      for (int i = 0; i < values.length; i++) {
+        if (currentFlashCard == setBox.getAt(i).word) {
+          print("Now0: " +
+              setBox.getAt(i).word +
+              ", Before0: " +
+              currentFlashCard);
           print(values[i]);
-         values.removeAt(i);
+          values.removeAt(i);
         }
       }
       Random random = new Random();
       // val = random.nextInt(values.length - 1);
-      print("Valuesssssss" +values.toString());
+      print("Valuesssssss" + values.toString());
       val = values[random.nextInt(values.length)];
-      print("Now: "+setBox.getAt(val).word +", Before: "+currentFlashCard);
+      print("Now: " + setBox.getAt(val).word + ", Before: " + currentFlashCard);
 
       //Checking if the card is a repeat and making sure we do not use a card which is repeated
-      if(currentFlashCard == setBox.getAt(val).word){
+      if (currentFlashCard == setBox.getAt(val).word) {
         int value = val;
-        while(val == value){
+        while (val == value) {
           val = values[random.nextInt(values.length)];
         }
       }
@@ -287,96 +347,104 @@ class _FlashCardsState extends State<FlashCards> {
     }
   }
 
-   FlipCard buildFlipCardP2() {
-     return FlipCard(
-       controller: _controller,
-        fill: Fill.fillBack,
-        onFlipDone: (status) {
-          toFlip = status;
-          print("Status" +status.toString());
-        },
-        direction: FlipDirection.HORIZONTAL, // default
-        front: Container(
-          width: double.infinity,
-          margin: EdgeInsets.all(10),
-          color: Color(0xffF5591F),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: Center(
-                  child: Text(
-                    setBox.getAt(val).word,
-                    style: TextStyle(
-                      fontSize: 40,
-                    ),
+  FlipCard buildFlipCardP2() {
+    updateCardColor();
+    return FlipCard(
+      controller: _controller,
+      fill: Fill.fillBack,
+      onFlipDone: (status) {
+        toFlip = status;
+        print("Status" + status.toString());
+      },
+      direction: FlipDirection.HORIZONTAL, // default
+      front: Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(10),
+        color: Provider.of<flashCardChange>(context).getColor,
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  setBox.getAt(val).word,
+                  style: TextStyle(
+                    fontSize: 40,
                   ),
                 ),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    speech(setBox.getAt(val).word);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.volume_up,
-                      size: 50,
-                    ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  speech(setBox.getAt(val).word);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.volume_up,
+                    size: 50,
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text("Flip"),
-                  Icon(Icons.next_plan),
-                ],
-              ),
-            ],
-          ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text("Flip"),
+                Icon(Icons.next_plan),
+              ],
+            ),
+          ],
         ),
-        back: Container(
-          margin: EdgeInsets.all(10),
-          color: Color(0xffF5591F),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Meaning: ' + setBox.getAt(val).meaning,
-                style: TextStyle(fontSize: 22),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              setBox.getAt(val).example != "No Example Found"
-              ? Text(
-                '  Example: ' + setBox.getAt(val).example,
-                style: TextStyle(fontSize: 22),
-              ) : Text(""),
-              SizedBox(
-                height: 20,
-              ),
-              // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
-              setBox.getAt(val).synonym[0] != "No Synonyms Found"
-                  ? Text(
-                'Synonym: ' +
-                    setBox.getAt(val).synonym[0] +
-                    " ," +
-                    setBox.getAt(val).synonym[1] +
-                    " ," +
-                    setBox.getAt(val).synonym[2],
-                    // " ," +
-                    // setBox.getAt(val).synonym[3],
-                style: TextStyle(fontSize: 20),
-              )
-                  : Text("")
-            ],
-          ),
+      ),
+      back: Container(
+        margin: EdgeInsets.all(10),
+        color: Provider.of<flashCardChange>(context).getColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Meaning: ' + setBox.getAt(val).meaning,
+              style: TextStyle(fontSize: 22),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            setBox.getAt(val).example != "No Example Found"
+                ? Text(
+                    '  Example: ' + setBox.getAt(val).example,
+                    style: TextStyle(fontSize: 22),
+                  )
+                : Text(""),
+            SizedBox(
+              height: 20,
+            ),
+            // Text('Synonym: ' +getSynonym(), style: TextStyle(fontSize: 20),),
+            (setBox.getAt(val).synonym[0] != "No Synonyms Found" &&
+                    setBox.getAt(val).synonym[0] != "No Antonyms Found")
+                ? buildText()
+                : Text(""),
+          ],
         ),
-      );
-   }
-}
+      ),
+    );
+  }
 
+  Text buildText() {
+    String synoymn = "Synonym: ";
+    for(int i=0; i<setBox.getAt(val).synonym.length; i++){
+      if(i == setBox.getAt(val).synonym.length-1){
+        synoymn = synoymn + setBox.getAt(val).synonym[i] + ".";
+      }
+      else{
+        synoymn = synoymn + setBox.getAt(val).synonym[i] + ", ";
+      }
+    }
+    return Text(
+      synoymn,
+      style: TextStyle(fontSize: 20),
+    );
+  }
+}
